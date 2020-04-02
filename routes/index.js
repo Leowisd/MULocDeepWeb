@@ -123,19 +123,9 @@ schedule.scheduleJob('0 0 0 * * 0', function () {
 		if (docs != undefined) {
 			for (var i = 0; i < docs.length; i++) {
 				var dFile = docs[i].file;
-				fs.unlink('data/input/' + dFile, function (err) {
-					if (err) console.error(err);
-				});
-				fs.unlink('data/results/' + docs[i].id + '.res', function (err) {
-					if (err) console.error(err);
-				});
+				
+				deleteFolder('data/results/' + docs[i].id);
 				fs.unlink('data/upload/' + dFile, function (err) {
-					if (err) console.error(err);
-				});
-				fs.unlink('data/SCOP/' + docs[i].id + '_SCOP.csv', function (err) {
-					if (err) console.error(err);
-				});
-				fs.unlink('data/CATH/' + docs[i].id + '_CATH.csv', function (err) {
 					if (err) console.error(err);
 				});
 			}
@@ -150,5 +140,25 @@ schedule.scheduleJob('0 0 0 * * 0', function () {
 	});
 
 });
+
+function deleteFolder(path) {
+    let files = [];
+    if( fs.existsSync(path) ) {
+        files = fs.readdirSync(path);
+        files.forEach(function(file,index){
+            let curPath = path + "/" + file;
+            if(fs.statSync(curPath).isDirectory()) {
+                deleteFolder(curPath);
+            } else {
+                fs.unlink(curPath, function (err) {
+					if (err) console.error(err);
+				});
+            }
+        });
+        fs.rmdir(path, function (err) {
+			if (err) console.error(err);
+		});
+    }
+}
 
 module.exports = router;
