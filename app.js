@@ -9,7 +9,7 @@ var uploadsRoutes = require("./routes/uploads"),
 	indexRoutes = require("./routes/index"),
 	processRoutes = require("./routes/process");
 
-mongoose.connect("mongodb://localhost/deepdom");
+mongoose.connect("mongodb://localhost/mulocdeep");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
@@ -26,6 +26,6 @@ app.get("*", function (req, res) {
 });
 
 app.listen(3000, process.env.IP, function () {
-	console.log("The DeepDom Server Has Started At: http://localhost:3000/");
+	console.log("The MULocDeep Server Has Started At: http://localhost:3000/");
 	console.log("");
 })
