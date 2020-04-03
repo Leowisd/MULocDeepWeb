@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router({ mergeParams: true });
 var sd = require("silly-datetime"),
 	fs = require("fs"),
+	archiver = require('archiver'),
 	schedule = require("node-schedule"),
 	moment = require("moment"),
 	request = require("request");
@@ -43,7 +44,9 @@ schedule.scheduleJob(rule, function () {
 					else console.log("Job status changed...");
 				});
 
+				// --------------------------
 				// Run the predict script
+				// --------------------------
 				// python predict.py -input ./wiki_seq.txt -output ./test --no-att
 				var arg1 = 'data/upload/' + job.file;
 				var arg2 = 'data/results/' + job.id + '/';
@@ -63,7 +66,7 @@ schedule.scheduleJob(rule, function () {
 						});
 						// return;
 					}
-					
+
 					curProcess = 0;
 					var updates = { $set: { status: 'Done' } };
 					jobInfo.updateOne({ _id: job.id }, updates, function (err, job) {
@@ -91,6 +94,59 @@ schedule.scheduleJob(rule, function () {
 							console.log('mail sent:', info.response);
 						});
 					}
+
+					// -----------------------
+					// Compress results data
+					// -----------------------
+					// create a file to stream archive data to.
+					var output = fs.createWriteStream('data/results/' + job.id + '/' + job.id + '.zip');
+					var archive = archiver('zip', {
+						zlib: { level: 9 } // Sets the compression level.
+					});
+
+					// listen for all archive data to be written
+					// 'close' event is fired only when a file descriptor is involved
+					output.on('close', function () {
+						console.log(archive.pointer() + ' total bytes');
+						console.log('archiver has been finalized and the output file descriptor has closed.');
+						console.log('=======================================================================');
+					});
+
+					// This event is fired when the data source is drained no matter what was the data source.
+					// It is not part of this library but rather from the NodeJS Stream API.
+					output.on('end', function () {
+						console.log('Data has been drained');
+					});
+
+					// good practice to catch warnings (ie stat failures and other non-blocking errors)
+					archive.on('warning', function (err) {
+						if (err.code === 'ENOENT') {
+							// log warning
+						} else {
+							// throw error
+							throw err;
+						}
+					});
+
+					// good practice to catch this error explicitly
+					archive.on('error', function (err) {
+						throw err;
+					});
+
+					// pipe archive data to the file
+					archive.pipe(output);
+
+					// append a file from stream
+					var file1 = 'data/results/' + job.id + '/attention_weights.txt';
+					archive.append(fs.createReadStream(file1), { name: 'attention_weights.txt' });
+					var file2 = 'data/results/' + job.id + '/sub_cellular_prediction.txt';
+					archive.append(fs.createReadStream(file2), { name: 'sub_cellular_prediction.txt' });
+					var file3 = 'data/results/' + job.id + '/sub_organellar_prediction.txt';
+					archive.append(fs.createReadStream(file3), { name: 'sub_organellar_prediction.txt' });
+
+					// finalize the archive (ie we are done appending files but streams have to finish yet)
+					// 'close', 'end' or 'finish' may be fired right after calling this method so register to them beforehand
+					archive.finalize();
 				});
 			}
 		});
@@ -123,7 +179,7 @@ schedule.scheduleJob('0 0 0 * * 0', function () {
 		if (docs != undefined) {
 			for (var i = 0; i < docs.length; i++) {
 				var dFile = docs[i].file;
-				
+
 				deleteFolder('data/results/' + docs[i].id);
 				fs.unlink('data/upload/' + dFile, function (err) {
 					if (err) console.error(err);
@@ -142,23 +198,23 @@ schedule.scheduleJob('0 0 0 * * 0', function () {
 });
 
 function deleteFolder(path) {
-    let files = [];
-    if( fs.existsSync(path) ) {
-        files = fs.readdirSync(path);
-        files.forEach(function(file,index){
-            let curPath = path + "/" + file;
-            if(fs.statSync(curPath).isDirectory()) {
-                deleteFolder(curPath);
-            } else {
-                fs.unlink(curPath, function (err) {
+	let files = [];
+	if (fs.existsSync(path)) {
+		files = fs.readdirSync(path);
+		files.forEach(function (file, index) {
+			let curPath = path + "/" + file;
+			if (fs.statSync(curPath).isDirectory()) {
+				deleteFolder(curPath);
+			} else {
+				fs.unlink(curPath, function (err) {
 					if (err) console.error(err);
 				});
-            }
-        });
-        fs.rmdir(path, function (err) {
+			}
+		});
+		fs.rmdir(path, function (err) {
 			if (err) console.error(err);
 		});
-    }
+	}
 }
 
 module.exports = router;

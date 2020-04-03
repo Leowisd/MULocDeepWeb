@@ -339,7 +339,7 @@ router.get("/jobs/:id", function (req, res) {
 					Golgi_apparatus_Golgi_stack_membrane: parseFloat(strarr[43].substring(strarr[43].indexOf(':') + 1)),
 					Lysosome_membrane: parseFloat(strarr[44].substring(strarr[44].indexOf(':') + 1)),
 					Peroxisome_membrane: parseFloat(strarr[45].substring(strarr[45].indexOf(':') + 1)),
-					prediction: strarr[46].substring(strarr[46].indexOf(':') + 1)
+					Prediction: strarr[46].substring(strarr[46].indexOf(':') + 1)
 				}
 				organellar.push(cur);
 			}
@@ -353,8 +353,8 @@ router.get("/jobs/:id", function (req, res) {
 
 // DOWNLOAD: download the result file
 router.get("/jobs/download/:id", function (req, res) {
-	var file = req.params.id.substr(1);
-	res.download("data/results/" + file);
+	var id = req.params.id.substr(1);
+	res.download("data/results/" + id + '/' + id + '.zip');
 });
 
 // DELETE: delete the selected job
