@@ -29,6 +29,8 @@
                     </li>
                 </ul>
             </div>
+            <button class="btn btn-sm btn-outline-light my-2 my-sm-0" href="javascript:void(0);"
+                onclick="javascript:startIntro();">HELP</button>
         </div>
     </nav>
 
@@ -43,12 +45,12 @@
         <div class="btn-toolbar d-flex justify-content-start" role="toolbar" aria-label="Toolbar with button group">
             <div class="btn-group mr-2" role="group" aria-label="First group">
                 <% var address = "/jobs/download/:" + jobId%>
-                <a class="btn btn-secondary" href="<%= address%>">
+                <a class="btn btn-secondary" href="<%= address%>" id="downloadBtn">
                     Download Result
                 </a>
             </div>
 
-            <div class="btn-group mt-4 mt-sm-0" role="group" aria-label="Second group">
+            <div class="btn-group mt-4 mt-sm-0" role="group" aria-label="Second group" id="picker">
                 <select class="selectpicker show-tick" multiple data-actions-box="true" data-size="5"
                     data-style="btn-primary" data-width="300px" data-live-search="true"
                     title="Choose one of the following...">

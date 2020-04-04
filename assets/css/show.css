@@ -130,16 +130,6 @@
     display: inline-block;
 }
 
-.rect-hover {
-    stroke-width: 2;
-    stroke: black;
-}
-
-.table-hover {
-    background: rgb(231, 209, 209);
-    opacity: 0.8;
-}
-
 .chart_container {
     height: 370px;
     width: 100%;

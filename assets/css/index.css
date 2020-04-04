@@ -1,0 +1,18 @@
+#map {
+    position: absolute;
+    height: 80%;
+    width: 100%;
+    left: 0;
+    right: 0;
+  }
+
+#welcomeCard {
+    position: absolute;
+    z-index: 1;
+    top: 30%;
+    left: 0;
+    right: 0;
+    /* bottom: 0;
+    margin: auto; */
+    height: fit-content;
+}

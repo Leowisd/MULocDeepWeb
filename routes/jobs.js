@@ -11,69 +11,6 @@ router.get("/jobs", function (req, res) {
 	res.render("SEARCH");
 });
 
-// EXAMPLE: jump to example result
-router.get("/jobs/example", function (req, res) {
-	var jobId = 'example';
-	fs.exists('data/results/' + jobId + '.res', function (exists) {
-		if (!exists) {
-			res.render("404");
-		}
-		else {
-			// ============================
-			// analysis deepdom result data
-			// ============================
-			var results = [];
-			var names = [];
-			var arr = fs.readFileSync('data/upload/' + jobId + '_UPLOAD.fa').toString().replace(/^[\n|\r\n]*|[\n|\r\n]*$/g, '').split(/\r\n|\n\r|[\n\r]/);
-			for (var i = 0; i < arr.length; i++)
-				if (i % 2 == 0) {
-					names.push(arr[i]);
-				}
-
-			var scores = [];
-			arr = fs.readFileSync('data/results/' + jobId + '.res').toString().replace(/^[\n|\r\n]*|[\n|\r\n]*$/g, '').split(/\r\n|\n\r|[\n\r]/);
-			for (var i = 0; i < arr.length; i++)
-				if (i % 2 == 0) {
-					var result = { name: arr[i], score: arr[i + 1] }
-					results.push(result);
-					// names.push(arr[i]);
-					scores.push(arr[i + 1]);
-				}
-
-			var data = fs.readFileSync('data/input/' + jobId + '_INPUT.fa').toString().replace(/^[\n|\r\n]*|[\n|\r\n]*$/g, '').split(/\r\n|\n\r|[\n\r]/);
-			var seq = [];
-			var j = 0;
-			for (var i = 0; i < results.length; i++) {
-				var name = results[i].name;
-				var s = "";
-				var num = 0;
-				while (j < data.length) {
-					var tmp = data[j].lastIndexOf('_');
-					var na = data[j].substring(0, tmp);
-
-					if (name === na) {
-						if (s != "") {
-							if (num > 0) {
-								s = s.substring(0, 80 * num);
-							}
-						}
-						s += data[j + 1];
-						j += 2;
-						num++;
-					}
-					else {
-						seq.push(s);
-						s = "";
-						break;
-					}
-				}
-				if (s != "") seq.push(s);
-			}
-			res.render("EXAMPLE", { names: names, scores: scores, seq: seq, file: jobId + '.res', jobId: jobId });
-		}
-	});
-});
-
 // JOBSLIST: show all jos
 router.get("/jobs/all", function (req, res) {
 	jobInfo.find({ 'ipAddress': get_client_ip(req) }, function (err, docs) {
@@ -126,9 +63,8 @@ router.get("/jobs/all", function (req, res) {
 // SHOW: show result
 router.get("/jobs/:id", function (req, res) {
 	var jobId = req.params.id;
-	jobId = jobId.substr(1);
-
-	// var file = jobId + '.res';
+	if (jobId != "example")
+		jobId = jobId.substr(1);
 
 	fs.exists('data/results/' + jobId + '/attention_weights.txt', function (exists) {
 		if (!exists) {
@@ -345,8 +281,10 @@ router.get("/jobs/:id", function (req, res) {
 			}
 			// console.log(organellar);
 
-			res.render("SHOW", {names: names, seq: seq, weights: weights, cellular: cellular, organellar: organellar, jobId: jobId});
-			// res.render("SHOW", { names: names, scores: scores, seq: seq, file: jobId + '.res', jobId: jobId });
+			if (jobId == "example")
+				res.render("EXAMPLE", {names: names, seq: seq, weights: weights, cellular: cellular, organellar: organellar, jobId: jobId});
+			else			
+				res.render("SHOW", {names: names, seq: seq, weights: weights, cellular: cellular, organellar: organellar, jobId: jobId});
 		}
 	});
 });

@@ -26,5 +26,9 @@ model_small.load_weights('/home/leowisd/Desktop/workplace/MULocDeepWeb/MULocDeep
 
 ## To do List
 
-1. Modify the display page
-2. change the display of result JSON data
+~~1. Modify the display page~~
+~~2. change the display of result JSON data~~
+~~3. modify the example page~~
+4. new email
+5. add some locations on the map
+6. fix the the number of total query bug

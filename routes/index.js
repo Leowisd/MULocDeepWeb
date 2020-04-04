@@ -156,46 +156,46 @@ schedule.scheduleJob(rule, function () {
 // clean data per week
 // schedule.scheduleJob('0 * * * * *', function () {
 
-schedule.scheduleJob('0 0 0 * * 0', function () {
-	var curTime = moment().utcOffset("-06:00").format('YYYY-MM-DD HH:mm:ss');
-	var curDay = parseInt(curTime.substring(8, 10));
-	var curMonth = parseInt(curTime.substring(5, 7));
-	var curYear = parseInt(curTime.substring(0, 4));
-	curDay -= 7;
-	if (curDay <= 0) {
-		curDay = 30 + curDay;
-		curMonth--;
-		if (curMonth <= 0) {
-			curMonth = 12 + curMonth;
-			curYear--;
-		}
-	}
-	var due = curYear + "-" + curMonth + "-" + curDay + " 00:00:00";
-	// var due = '2020' + "-" + curMonth + "-" + curDay + " 00:00:00";
+// schedule.scheduleJob('0 0 0 * * 0', function () {
+// 	var curTime = moment().utcOffset("-06:00").format('YYYY-MM-DD HH:mm:ss');
+// 	var curDay = parseInt(curTime.substring(8, 10));
+// 	var curMonth = parseInt(curTime.substring(5, 7));
+// 	var curYear = parseInt(curTime.substring(0, 4));
+// 	curDay -= 7;
+// 	if (curDay <= 0) {
+// 		curDay = 30 + curDay;
+// 		curMonth--;
+// 		if (curMonth <= 0) {
+// 			curMonth = 12 + curMonth;
+// 			curYear--;
+// 		}
+// 	}
+// 	var due = curYear + "-" + curMonth + "-" + curDay + " 00:00:00";
+// 	// var due = '2020' + "-" + curMonth + "-" + curDay + " 00:00:00";
 
-	jobInfo.find({ 'submittedTime': { $lte: due } }, function (err, docs) {
-		if (err)
-			return console.error(err);
-		if (docs != undefined) {
-			for (var i = 0; i < docs.length; i++) {
-				var dFile = docs[i].file;
+// 	jobInfo.find({ 'submittedTime': { $lte: due } }, function (err, docs) {
+// 		if (err)
+// 			return console.error(err);
+// 		if (docs != undefined) {
+// 			for (var i = 0; i < docs.length; i++) {
+// 				var dFile = docs[i].file;
 
-				deleteFolder('data/results/' + docs[i].id);
-				fs.unlink('data/upload/' + dFile, function (err) {
-					if (err) console.error(err);
-				});
-			}
-		}
-		return console.log("Clean Old Tasks Files at:" + curTime);
-	});
+// 				deleteFolder('data/results/' + docs[i].id);
+// 				fs.unlink('data/upload/' + dFile, function (err) {
+// 					if (err) console.error(err);
+// 				});
+// 			}
+// 		}
+// 		return console.log("Clean Old Tasks Files at:" + curTime);
+// 	});
 
-	jobInfo.deleteMany({ 'submittedTime': { $lte: due } }, function (err) {
-		if (err)
-			return console.error(err);
-		return console.log("Clean Old Tasks Historys at:" + curTime);
-	});
+// 	jobInfo.deleteMany({ 'submittedTime': { $lte: due } }, function (err) {
+// 		if (err)
+// 			return console.error(err);
+// 		return console.log("Clean Old Tasks Historys at:" + curTime);
+// 	});
 
-});
+// });
 
 function deleteFolder(path) {
 	let files = [];

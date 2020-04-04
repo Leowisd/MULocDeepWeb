@@ -1,16 +1,6 @@
 <% include partials/header %>
 
-<style>
-    * {
-        font-family: 'Open Sans', sans-serif;
-    }
-
-    .seperate-bar {
-        color: black;
-        text-align: end;
-        font-size: 1rem;
-    }
-</style>
+<link rel="stylesheet" type="text/css" href="/css/jobinfo.css">
 
 <div class="wrapper">
 
@@ -103,30 +93,7 @@
     <center><button class="btn btn-primary btn-sm mt-2 mb-3" id="copyBtn" data-step="3" data-intro="Copy the job ID."> Copy </button></center>
 </div>
 
-<!-- auto fresh -->
-<script>
-    if ("<%= flag%>" == 0) {
-        function myrefresh() {
-            window.location.reload();
-        }
-        setTimeout('myrefresh()', 10000); //10s refresh
-    }
+<script type="text/javascript" src="/js/jobinfo.js"></script>
 
-    // create a copy button
-    $('#copyBtn').click(function () {
-        const input = document.createElement('input');
-        document.body.appendChild(input);
-        input.setAttribute('readonly', 'readonly')
-        input.setAttribute('value', $('#jobIDOutput').text().trim());
-        $(input).select();
-        // input.setSelectionRange(0, 9999);
-        if (document.execCommand('copy')) {
-            document.execCommand('copy');
-            console.log('copy success');
-            alert("Copy Success!");
-        }
-        document.body.removeChild(input);
-    })
-</script>
 
 <% include partials/footer %>

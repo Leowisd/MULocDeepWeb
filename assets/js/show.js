@@ -1,6 +1,3 @@
-window.onload = function () {
-};
-
 $(function () {
     $('[data-toggle="popover"]').popover()
 })
@@ -28,6 +25,17 @@ $(function () {
 // +++++++++++++++++++++++++++++++++++++
 // +++++++++++++++++++++++++++++++++++++
 
+// ============================
+// To show all results at first
+// ============================
+setTimeout("helper()",100);  
+function helper(){
+    $('.selectpicker').selectpicker('selectAll');
+}
+
+// ===========================
+// Create elements dynamically
+// ===========================
 var mainContainer = document.querySelector('#mainContainer');
 var sideNav = document.querySelector('.sidenav');
 var navCopy = sideNav.innerHTML;
@@ -112,8 +120,59 @@ $(".selectpicker").change(function () {
         cellularContent.appendChild(cellularContentBody);
         cellularContentBody.classList.add("card-body");
         cellularContentBody.setAttribute("id", "cellular_content_" + id);
-        cellularContentBody.textContent = JSON.stringify(cellular[id]);
 
+        // -------------
+        // create a list
+        // -------------
+        var cellularListContainer = document.createElement("div");
+        cellularContentBody.appendChild(cellularListContainer);
+        cellularListContainer.classList.add("table-responsive");
+
+        var cellularList = document.createElement("table");
+        cellularListContainer.appendChild(cellularList);
+        cellularList.classList.add("table");
+        cellularList.classList.add("table-hover");
+
+        var cellularListthead = document.createElement("thead");
+        cellularList.appendChild(cellularListthead);
+
+        var cellularListtheadtr = document.createElement("tr");
+        cellularListthead.appendChild(cellularListtheadtr);
+
+        var cellularListtheadth0 = document.createElement("th");
+        cellularListtheadtr.appendChild(cellularListtheadth0);
+        cellularListtheadth0.setAttribute("scope", "col");
+        cellularListtheadth0.textContent = "#";
+        var cellularListtheadth1 = document.createElement("th");
+        cellularListtheadtr.appendChild(cellularListtheadth1);
+        cellularListtheadth1.setAttribute("scope", "col");
+        cellularListtheadth1.textContent = "Name";
+        var cellularListtheadth2 = document.createElement("th");
+        cellularListtheadtr.appendChild(cellularListtheadth2);
+        cellularListtheadth2.setAttribute("scope", "col");
+        cellularListtheadth2.textContent = "Value";
+
+        var cellularListtbody = document.createElement("tbody");
+        cellularList.appendChild(cellularListtbody);
+        let idx = 1;
+        for (var key in cellular[id]) {
+            let attrName = key;
+            let attrValue = cellular[id][key];
+            if (attrName == "seqName" || attrName == "Predict") continue;
+
+            let tr = document.createElement("tr");
+            cellularListtbody.appendChild(tr);
+            let th = document.createElement("th");
+            tr.appendChild(th);
+            th.setAttribute("scope", "row");
+            th.textContent = idx++;
+            let td1 = document.createElement("td");
+            tr.appendChild(td1);
+            td1.textContent = attrName;
+            let td2 = document.createElement("td");
+            tr.appendChild(td2);
+            td2.textContent = attrValue;
+        }
 
         // // ===============================
         // // Create organellar Collapse Components
@@ -149,8 +208,59 @@ $(".selectpicker").change(function () {
         organellarContent.appendChild(organellarContentBody);
         organellarContentBody.classList.add("card-body");
         organellarContentBody.setAttribute("id", "organellar_content_" + id);
-        organellarContentBody.textContent = JSON.stringify(organellar[id]);
 
+        // -------------
+        // create a list
+        // -------------
+        var organellarListContainer = document.createElement("div");
+        organellarContentBody.appendChild(organellarListContainer);
+        organellarListContainer.classList.add("table-responsive");
+
+        var organellarList = document.createElement("table");
+        organellarListContainer.appendChild(organellarList);
+        organellarList.classList.add("table");
+        organellarList.classList.add("table-hover");
+
+        var organellarListthead = document.createElement("thead");
+        organellarList.appendChild(organellarListthead);
+
+        var organellarListtheadtr = document.createElement("tr");
+        organellarListthead.appendChild(organellarListtheadtr);
+
+        var organellarListtheadth0 = document.createElement("th");
+        organellarListtheadtr.appendChild(organellarListtheadth0);
+        organellarListtheadth0.setAttribute("scope", "col");
+        organellarListtheadth0.textContent = "#";
+        var organellarListtheadth1 = document.createElement("th");
+        organellarListtheadtr.appendChild(organellarListtheadth1);
+        organellarListtheadth1.setAttribute("scope", "col");
+        organellarListtheadth1.textContent = "Name";
+        var organellarListtheadth2 = document.createElement("th");
+        organellarListtheadtr.appendChild(organellarListtheadth2);
+        organellarListtheadth2.setAttribute("scope", "col");
+        organellarListtheadth2.textContent = "Value";
+
+        var organellarListtbody = document.createElement("tbody");
+        organellarList.appendChild(organellarListtbody);
+        let idx2 = 1;
+        for (var key in organellar[id]) {
+            let attrName = key;
+            let attrValue = organellar[id][key];
+            if (attrName == "Prediction") continue;
+
+            let tr = document.createElement("tr");
+            organellarListtbody.appendChild(tr);
+            let th = document.createElement("th");
+            tr.appendChild(th);
+            th.setAttribute("scope", "row");
+            th.textContent = idx2++;
+            let td1 = document.createElement("td");
+            tr.appendChild(td1);
+            td1.textContent = attrName;
+            let td2 = document.createElement("td");
+            tr.appendChild(td2);
+            td2.textContent = attrValue;
+        }
 
         // // ===================================
         // // Create Weights Collapse Components
@@ -175,7 +285,7 @@ $(".selectpicker").change(function () {
         weightsBtn.classList.add("btn-link");
         weightsBtn.setAttribute("data-toggle", "collapse");
         weightsBtn.setAttribute("data-target", "#weights_" + id);
-        weightsBtn.textContent = "Weights Chart";
+        weightsBtn.textContent = "Attention Weights Chart";
 
         var weightsContent = document.createElement("div");
         weightsCard.appendChild(weightsContent);
@@ -219,10 +329,10 @@ $(".selectpicker").change(function () {
         });
     }
     // After the collapse expanded than render the chart, or the chart cannot get the size of the container.
-    for (var i = 0; i < idList.length; i++){
+    for (var i = 0; i < idList.length; i++) {
         let id = idList[i];
         $('#weights_' + id).on("shown.bs.collapse", function () {
-            chart[id].render();                    
+            chart[id].render();
         });
     }
 
@@ -296,4 +406,44 @@ function toggleNav() {
 
 function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
+}
+
+function startIntro() {
+    var intro = introJs();
+    intro.setOptions({
+        steps: [
+            {
+                element: document.querySelector('#downloadBtn'),
+                intro: "Click it to download predicting results."
+            },
+            {
+                element: document.querySelector('#picker'),
+                intro: "You can select results which you wanna check in currrent job.",
+            },
+            {
+                element: document.querySelector('#query_header_0'),
+                intro: 'The name of current sequence. Click to display the detail of this sequence.',
+            },
+            {
+                element: document.querySelector('#cellular_heading_0'),
+                intro: "Click to show/hide the details of sub-cellular prediction results",
+            },
+            {
+                element: document.querySelector('#organellar_heading_0'),
+                intro: 'Click to show/hide the details of sub-organellar prediction results'
+            },
+            {
+                element: document.querySelector('#weights_heading_0'),
+                intro: 'Click to show/hide the the chart of attention weights. You can drag to zoom and click menu button to print/save the chart.'
+            },
+            {
+                intro: "Click the right bottom button(if appear) to scroll to the top of this page.",
+            },
+            {
+                intro: "Click the left side button to show the side nav bar including selected results. You can click specific result to scroll to it.",
+            }
+        ]
+    });
+
+    intro.start();
 }
