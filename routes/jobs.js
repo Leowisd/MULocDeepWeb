@@ -117,102 +117,20 @@ router.get("/jobs/:id", function (req, res) {
 				let strarr = arr3[i].replace(/^[\n|\r\n]*|[\n|\r\n]*$/g, '').replace('/\r\n|\n\r|[\n\r]/', '').split('\t');
 				// console.log(strarr);
 				let name = '>' + strarr[0].replace(':', '');
-
-				let tmp = strarr[1].substring(strarr[1].indexOf('[') + 1, strarr[1].indexOf(']')).split(' ');
-				let nucleus = [];
-				for (var j = 0; j < tmp.length; j++) {
-					if (tmp[j] != '') {
-						nucleus.push(parseFloat(tmp[j]));
-					}
-				}
-
-				tmp = strarr[2].substring(strarr[2].indexOf('[') + 1, strarr[2].indexOf(']')).split(' ');
-				let cytoplasm = [];
-				for (var j = 0; j < tmp.length; j++) {
-					if (tmp[j] != '') {
-						cytoplasm.push(parseFloat(tmp[j]));
-					}
-				}
-
-				tmp = strarr[3].substring(strarr[3].indexOf('[') + 1, strarr[3].indexOf(']')).split(' ');
-				let secreted = [];
-				for (var j = 0; j < tmp.length; j++) {
-					if (tmp[j] != '') {
-						secreted.push(parseFloat(tmp[j]));
-					}
-				}
-
-				tmp = strarr[4].substring(strarr[4].indexOf('[') + 1, strarr[4].indexOf(']')).split(' ');
-				let mitochondrion = [];
-				for (var j = 0; j < tmp.length; j++) {
-					if (tmp[j] != '') {
-						mitochondrion.push(parseFloat(tmp[j]));
-					}
-				}
-
-				tmp = strarr[5].substring(strarr[5].indexOf('[') + 1, strarr[5].indexOf(']')).split(' ');
-				let membrane = [];
-				for (var j = 0; j < tmp.length; j++) {
-					if (tmp[j] != '') {
-						membrane.push(parseFloat(tmp[j]));
-					}
-				}
-
-				tmp = strarr[6].substring(strarr[6].indexOf('[') + 1, strarr[6].indexOf(']')).split(' ');
-				let endoplasmic = [];
-				for (var j = 0; j < tmp.length; j++) {
-					if (tmp[j] != '') {
-						endoplasmic.push(parseFloat(tmp[j]));
-					}
-				}
-
-				tmp = strarr[7].substring(strarr[7].indexOf('[') + 1, strarr[7].indexOf(']')).split(' ');
-				let plastid = [];
-				for (var j = 0; j < tmp.length; j++) {
-					if (tmp[j] != '') {
-						plastid.push(parseFloat(tmp[j]));
-					}
-				}
-
-				tmp = strarr[8].substring(strarr[8].indexOf('[') + 1, strarr[8].indexOf(']')).split(' ');
-				let golgi_apparatus = [];
-				for (var j = 0; j < tmp.length; j++) {
-					if (tmp[j] != '') {
-						golgi_apparatus.push(parseFloat(tmp[j]));
-					}
-				}
-
-				tmp = strarr[9].substring(strarr[9].indexOf('[') + 1, strarr[9].indexOf(']')).split(' ');
-				let lysosome = [];
-				for (var j = 0; j < tmp.length; j++) {
-					if (tmp[j] != '') {
-						lysosome.push(parseFloat(tmp[j]));
-					}
-				}
-
-				tmp = strarr[10].substring(strarr[10].indexOf('[') + 1, strarr[10].indexOf(']')).split(' ');
-				let peroxisome = [];
-				for (var j = 0; j < tmp.length; j++) {
-					if (tmp[j] != '') {
-						peroxisome.push(parseFloat(tmp[j]));
-					}
-				}
-
-				let predict = strarr[11].substring(strarr[11].indexOf(':') + 1);
-
+				
 				let cur = {
 					seqName: name,
-					Nucleus: nucleus,
-					Cytoplasm: cytoplasm,
-					Secreted: secreted,
-					Mitochondrion: mitochondrion,
-					Membrane: membrane,
-					Endoplasmic: endoplasmic,
-					Plastid: plastid,
-					Golgi_apparatus: golgi_apparatus,
-					Lysosome: lysosome,
-					Peroxisome: peroxisome,
-					Predict: predict
+					Nucleus: parseFloat(strarr[1].substring(strarr[1].indexOf(':') + 1)),
+					Cytoplasm: parseFloat(strarr[2].substring(strarr[2].indexOf(':') + 1)),
+					Secreted: parseFloat(strarr[3].substring(strarr[3].indexOf(':') + 1)),
+					Mitochondrion: parseFloat(strarr[4].substring(strarr[4].indexOf(':') + 1)),
+					Membrane: parseFloat(strarr[5].substring(strarr[5].indexOf(':') + 1)),
+					Endoplasmic: parseFloat(strarr[6].substring(strarr[6].indexOf(':') + 1)),
+					Plastid: parseFloat(strarr[7].substring(strarr[7].indexOf(':') + 1)),
+					Golgi_apparatus: parseFloat(strarr[8].substring(strarr[8].indexOf(':') + 1)),
+					Lysosome: parseFloat(strarr[9].substring(strarr[9].indexOf(':') + 1)),
+					Peroxisome: parseFloat(strarr[10].substring(strarr[10].indexOf(':') + 1)),
+					Predict: strarr[11].substring(strarr[11].indexOf(':') + 1)
 				};
 				cellular.push(cur);
 			}

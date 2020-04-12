@@ -126,12 +126,13 @@ $(".selectpicker").change(function () {
         // -------------
         var cellularListContainer = document.createElement("div");
         cellularContentBody.appendChild(cellularListContainer);
-        cellularListContainer.classList.add("table-responsive");
+        cellularListContainer.classList.add("table-responsive-sm");
 
         var cellularList = document.createElement("table");
         cellularListContainer.appendChild(cellularList);
         cellularList.classList.add("table");
         cellularList.classList.add("table-hover");
+        cellularList.setAttribute("id", "cellular_table_" + id);
 
         var cellularListthead = document.createElement("thead");
         cellularList.appendChild(cellularListthead);
@@ -174,6 +175,13 @@ $(".selectpicker").change(function () {
             td2.textContent = attrValue;
         }
 
+        $("#cellular_table_" + id).DataTable({
+            "paging":   false,
+            "info":     false,
+            "searching": false,
+            "order": [[2, "desc"]]
+        });
+
         // // ===============================
         // // Create organellar Collapse Components
         // // ===============================
@@ -214,12 +222,13 @@ $(".selectpicker").change(function () {
         // -------------
         var organellarListContainer = document.createElement("div");
         organellarContentBody.appendChild(organellarListContainer);
-        organellarListContainer.classList.add("table-responsive");
+        organellarListContainer.classList.add("table-responsive-sm");
 
         var organellarList = document.createElement("table");
         organellarListContainer.appendChild(organellarList);
         organellarList.classList.add("table");
         organellarList.classList.add("table-hover");
+        organellarList.setAttribute("id", "organellar_table_" + id);
 
         var organellarListthead = document.createElement("thead");
         organellarList.appendChild(organellarListthead);
@@ -261,6 +270,13 @@ $(".selectpicker").change(function () {
             tr.appendChild(td2);
             td2.textContent = attrValue;
         }
+
+        $("#organellar_table_" + id).DataTable({
+            // "paging":   false,
+            "info":     false,
+            // "searching": false,
+            "order": [[2, "desc"]]
+        });
 
         // // ===================================
         // // Create Weights Collapse Components
