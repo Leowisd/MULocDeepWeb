@@ -83,11 +83,11 @@ schedule.scheduleJob(rule, function () {
 					// send success email 
 					if (job.email !== "") {
 						var mail = {
-							from: 'DeepDom<deepdom.service@gmail.com>',
-							subject: 'DeepDom: Job Infomation',
+							from: 'MULocDeep<mulocdeep@gmail.com>',
+							subject: 'MULocDeep: Job Infomation',
 							to: job.email,
 							text: 'Your job: ' + job.id + ' has completed!',
-							html: '<h3>DeepDomEX</h3><br><p> Your job :' + job.id + "has completed!</p>"
+							html: '<h3>MULocDeep</h3><br><p> Your job :' + job.id + "has completed!</p>"
 						};
 						transporter.sendMail(mail, function (error, info) {
 							if (error) return console.log(error);

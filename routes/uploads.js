@@ -78,7 +78,8 @@ router.post("/upload/sequence", function (req, res) {
 		if (doc == undefined) {
 			var user = new userInfo({
 				ipAddress: get_client_ip(req),
-				capacity: fileSize
+				capacity: fileSize,
+				query: 0
 			});
 
 			if (user.capacity > maxCapacity) {
@@ -143,14 +144,29 @@ router.post("/upload/sequence", function (req, res) {
 			}
 		});
 
+		// Update the number of querys of current user
+		userInfo.findOne({ 'ipAddress': get_client_ip(req) }, function (err, doc) {
+			let update = { $set: { query:  doc.query + 1} };
+			userInfo.updateOne({ 'ipAddress': get_client_ip(req) }, update, function (err, u) {
+				if (err)
+					console.log(err);
+				else {
+					console.log("User info was updated!");
+					console.log("User query: " + (doc.query + 1));
+					console.log("======================================");
+				}
+			});
+		});
+
+
 		// send job ID email
 		if (job.email !== "") {
 			var mail = {
-				from: 'DeepDom<deepdom.service@gmail.com>',
-				subject: 'DeepDomEX: Job Infomation',
+				from: 'MULocDeep<mulocdeep@gmail.com>',
+				subject: 'MULocDeep: Job Infomation',
 				to: email,
 				text: 'Your job ID is:' + job.id,
-				html: '<h3>DeepDomEX</h3><br><p> Your job ID is:</p>' + job.id
+				html: '<h3>MULocDeep</h3><br><p> Your job ID is:</p>' + job.id
 			};
 			transporter.sendMail(mail, function (error, info) {
 				if (error) return console.log(error);
@@ -209,7 +225,8 @@ router.post("/upload/file", function (req, res) {
 		if (doc == undefined) {
 			var user = new userInfo({
 				ipAddress: get_client_ip(req),
-				capacity: fileSize
+				capacity: fileSize,
+				query: 0
 			});
 			if (user.capacity > maxCapacity) {
 				user.capacity = 0;
@@ -273,14 +290,28 @@ router.post("/upload/file", function (req, res) {
 			}
 		});
 
+		// Update the number of querys of current user
+		userInfo.findOne({ 'ipAddress': get_client_ip(req) }, function (err, doc) {
+			let update = { $set: { query:  doc.query + 1} };
+			userInfo.updateOne({ 'ipAddress': get_client_ip(req) }, update, function (err, u) {
+				if (err)
+					console.log(err);
+				else {
+					console.log("User info was updated!");
+					console.log("User query: " + (doc.query + 1));
+					console.log("======================================");
+				}
+			});
+		});
+
 		// send job ID email
 		if (job.email !== "") {
 			var mail = {
-				from: 'DeepDom<deepdom.service@gmail.com>',
-				subject: 'DeepDom: Job Infomation',
+				from: 'MULocDeep<mulocdeep@gmail.com>',
+				subject: 'MULocDeep: Job Infomation',
 				to: email,
 				text: 'Your job ID is:' + job.id,
-				html: '<h3>DeepDomEX</h3><br><p> Your job ID is:</p>' + job.id
+				html: '<h3>MULocDeep</h3><br><p> Your job ID is:</p>' + job.id
 			};
 			transporter.sendMail(mail, function (error, info) {
 				if (error) return console.log(error);

@@ -27,7 +27,7 @@ var map = new Datamap({
   var bubblesURL = "/process/location/"
   $.get(bubblesURL, function (bubbles_list, status) {
     drawBubbles(bubbles_list);
-    var sleep = (bubbles_list.length - 1) * 1000;
+    var sleep = (bubbles_list.length - 1) * 100;
     setInterval(function () {
       drawBubbles(bubbles_list);
     }, sleep);

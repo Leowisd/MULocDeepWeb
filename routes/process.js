@@ -39,8 +39,12 @@ router.get("/process/statistic/users", function (req, res) {
 })
 
 router.get("/process/statistic/querys", function (req, res) {
-    jobInfo.countDocuments({}, function (err, count) {
+    userInfo.find({}, function (err, docs) {
         if (err) console.log(err);
+        let count = 0;
+        for (var i = 0; i < docs.length; i++){
+            count += docs[i].query;
+        }
         var data = {
             querys: count
         }

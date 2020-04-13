@@ -22,7 +22,8 @@ router.get("/jobs/all", function (req, res) {
 			if (doc == undefined) {
 				var user = new userInfo({
 					ipAddress: get_client_ip(req),
-					capacity: 0
+					capacity: 0,
+					query: 0
 				});
 				user.save(function (err, u) {
 					if (err)

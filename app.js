@@ -21,6 +21,10 @@ app.use(jobsRoutes);
 app.use(processRoutes);
 app.use(resultsRoutes);
 
+app.get("/contact", function (req, res) {
+	res.render("CONTACT");
+});
+
 app.get("*", function (req, res) {
 	res.render("404");
 });
