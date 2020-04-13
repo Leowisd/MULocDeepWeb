@@ -34,3 +34,8 @@ model_small.load_weights('./MULocDeep/cpu_models/fold' + str(foldnum) + '_big_lv
 ~~8. Add CONTACT page~~
 9. Add some introduction
 10.  search ID ? IP
+### version 1.1
+11. add email input on job waiting page
+12. add estimated time on job waiting page
+13. change the index to upload page
+14. change the results of predicting to bar chart
