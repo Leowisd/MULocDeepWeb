@@ -17,10 +17,6 @@ var transporter = require("../models/emailConfig");
 // max capacity for each user
 var maxCapacity = 50 * 1024 * 1024; //50 MB
 
-// UPLOAD: show the upload page
-router.get("/upload", function (req, res) {
-	res.render("UPLOAD");
-});
 
 // JOBINFO: show the current job info
 router.get("/upload/:id", function (req, res) {
@@ -39,6 +35,12 @@ router.get("/upload/:id", function (req, res) {
 			}
 		res.render("JOBINFO", { jobId: jobId, flag: flag, number: number });
 	});
+});
+
+// Add-on email submit on job info page
+router.post("/upload/email", function(req, res){
+	console.log(req.body.emailInput.trim());
+	console.log(req.body.jobIDStatic);
 });
 
 //Deal with sequence post

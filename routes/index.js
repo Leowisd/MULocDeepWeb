@@ -18,7 +18,15 @@ var curProcess = 0;
 // INDEX: show the landing page
 router.get("/", function (req, res) {
 	// console.log(get_client_ip(req));
-	res.render("INDEX");
+	res.render("UPLOAD");
+});
+
+router.get("/map", function(req, res){
+	res.render("MAP");
+});
+
+router.get("/contact", function (req, res) {
+	res.render("CONTACT");
 });
 
 // Set a rule schedule to run tasks per 5s
