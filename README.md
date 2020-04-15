@@ -1,5 +1,7 @@
 # MULocDeepWeb
 
+Version 1.0 -> 1.1
+
 ## System
 
 Ubuntu 16.04
@@ -24,18 +26,18 @@ model_small.load_weights('./MULocDeep/cpu_models/fold' + str(foldnum) + '_big_lv
 
 ## To do List
 
-~~1. Modify the display page~~
-~~2. change the display of result JSON data~~
-~~3. modify the example page~~
-~~4. add features to tables in example pages~~ 
-~~5. new email~~
-~~6. add some locations on the map~~
-~~7. fix the the number of total query bug~~
-~~8. Add CONTACT page~~
+1. ~~Modify the display page~~
+2. ~~change the display of result JSON data~~
+3. ~~modify the example page~~
+4. ~~add features to tables in example pages~~ 
+5. ~~new email~~
+6. ~~add some locations on the map~~
+7. ~~fix the the number of total query bug~~
+8. ~~Add CONTACT page~~
 9. Add some introduction
 10.  search ID ? IP
 ### version 1.1
-11. ~~add email input on job waiting page~~, update database
-12. add estimated time on job waiting page
-~~13. change the index to upload page~~
-14. change the results of predicting to bar chart
+11. ~~add email input on job waiting page, update database~~
+12. ~~add estimated time on job waiting page~~, add time function
+13. ~~change the index to upload page~~
+14. ~~change the results of predicting to bar chart~~, 是不是完全对应？

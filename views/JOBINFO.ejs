@@ -65,7 +65,7 @@
         </div>
         <h1 class="display-4 text-center mt-3"> Queued... </h1>
         <h5 class="text-center mt-3"> You are the No.<%= number %> in the waiting queue.</h5>
-        <h5 class="text-center mt-3 text-danger"> The estimated waiting time is XXXX.</h5>
+        <h5 class="text-center mt-3 text-danger"> The estimated waiting time is <%= time %>.</h5>
         <%} else if (flag == 1){%>
         <div class="progress">
             <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;"
@@ -78,26 +78,25 @@
                 aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
         <h1 class="display-4 text-center mt-3"> Predicting... </h1>
+        <h5 class="text-center mt-3 text-danger"> The estimated waiting time is <%= time %>.</h5>
         <%}%>
 
 </div>
 
-<div class="container border rounded shadow-lg mt-5" style="width: 20%;">
-    <form class="d-flex flex-column" action="/upload/email" method="POST">
-
+<div class="container border rounded shadow-lg mt-5 d-flex flex-column" style="width: 20%;">
         <h5 class="text-center mt-3">
             The job ID is:  
         </h5>
 
-        <input type="text" readonly class="btn" name="jobIDStatic" value="<%= jobId %>">
+        <input type="text" readonly class="btn" name="jobIDStatic" id="jobIDOutput" value="<%= jobId %>">
 
         <div class="btn-group mb-3" role="group">
             <% if (flag == 0 || flag == -1){%>
-            <button class="btn btn-outline-primary mt-2" id="jobIDOutput" disabled data-step="2"
+            <button class="btn btn-outline-primary mt-2" disabled data-step="2"
                 data-intro="If your job has completed, you can click the ID button to jump to result page.">View
                 Result</button>
             <%} else if (flag == 1){%>
-            <a class="btn btn-primary mt-2" href="/jobs/:<%= jobId %>" id="jobIDOutput" data-step="2"
+            <a class="btn btn-primary mt-2" href="/jobs/:<%= jobId %>" data-step="2"
                 data-intro="Click the ID button to jump to result page."> View Result</a>
             <%}%>
             <button class="btn btn-outline-secondary mt-2" id="copyBtn" data-step="3" data-intro="Copy the job ID."> Copy </button>    
@@ -108,16 +107,15 @@
                 Email address:
             </h5>
             <div class="input-group mb-3">
-                <input type="email" class="form-control" placeholder="Enter email" name="emailInput"
+                <input type="email" class="form-control" placeholder="Enter email" name="emailInput" id='emailInput'
                     aria-label="Enter email" aria-describedby="emailBtn" required>
                 <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="submit" id="emailBtn">Submit</button>
+                    <button class="btn btn-outline-secondary" id="emailBtn">Submit</button>
                 </div>
                 <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
                     else.</small>
             </div>
         <%}%>
-    </form>
 </div>
 
 <script type="text/javascript" src="/js/jobinfo.js"></script>

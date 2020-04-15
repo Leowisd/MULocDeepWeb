@@ -40,6 +40,8 @@ var mainContainer = document.querySelector('#mainContainer');
 var sideNav = document.querySelector('.sidenav');
 var navCopy = sideNav.innerHTML;
 var chart = [];
+var cellularChart = [];
+var organellarChart = [];
 $(".selectpicker").change(function () {
     var idList = $(".selectpicker").val();
     // console.log(idList);
@@ -109,7 +111,7 @@ $(".selectpicker").change(function () {
         cellularBtn.classList.add("btn-link");
         cellularBtn.setAttribute("data-toggle", "collapse");
         cellularBtn.setAttribute("data-target", "#cellular_" + id);
-        cellularBtn.textContent = "Sub Cellular Prediction: " + cellular[id].Predict;
+        cellularBtn.textContent = "Sub Cellular Prediction: " + cellular[id].Predict.replace(/_/g, ' ');;
 
         var cellularContent = document.createElement("div");
         cellularCard.appendChild(cellularContent);
@@ -121,66 +123,100 @@ $(".selectpicker").change(function () {
         cellularContentBody.classList.add("card-body");
         cellularContentBody.setAttribute("id", "cellular_content_" + id);
 
-        // -------------
-        // create a list
-        // -------------
-        var cellularListContainer = document.createElement("div");
-        cellularContentBody.appendChild(cellularListContainer);
-        cellularListContainer.classList.add("table-responsive-sm");
+        var cellularChartContainer = document.createElement("div");
+        cellularContentBody.appendChild(cellularChartContainer);
+        cellularChartContainer.setAttribute("id", "cellularChartContainer_" + id);
+        cellularChartContainer.classList.add("chart_container");
 
-        var cellularList = document.createElement("table");
-        cellularListContainer.appendChild(cellularList);
-        cellularList.classList.add("table");
-        cellularList.classList.add("table-hover");
-        cellularList.setAttribute("id", "cellular_table_" + id);
-
-        var cellularListthead = document.createElement("thead");
-        cellularList.appendChild(cellularListthead);
-
-        var cellularListtheadtr = document.createElement("tr");
-        cellularListthead.appendChild(cellularListtheadtr);
-
-        var cellularListtheadth0 = document.createElement("th");
-        cellularListtheadtr.appendChild(cellularListtheadth0);
-        cellularListtheadth0.setAttribute("scope", "col");
-        cellularListtheadth0.textContent = "#";
-        var cellularListtheadth1 = document.createElement("th");
-        cellularListtheadtr.appendChild(cellularListtheadth1);
-        cellularListtheadth1.setAttribute("scope", "col");
-        cellularListtheadth1.textContent = "Name";
-        var cellularListtheadth2 = document.createElement("th");
-        cellularListtheadtr.appendChild(cellularListtheadth2);
-        cellularListtheadth2.setAttribute("scope", "col");
-        cellularListtheadth2.textContent = "Value";
-
-        var cellularListtbody = document.createElement("tbody");
-        cellularList.appendChild(cellularListtbody);
-        let idx = 1;
+        var cellularCChartData = [];
         for (var key in cellular[id]) {
-            let attrName = key;
-            let attrValue = cellular[id][key];
-            if (attrName == "seqName" || attrName == "Predict") continue;
-
-            let tr = document.createElement("tr");
-            cellularListtbody.appendChild(tr);
-            let th = document.createElement("th");
-            tr.appendChild(th);
-            th.setAttribute("scope", "row");
-            th.textContent = idx++;
-            let td1 = document.createElement("td");
-            tr.appendChild(td1);
-            td1.textContent = attrName;
-            let td2 = document.createElement("td");
-            tr.appendChild(td2);
-            td2.textContent = attrValue;
+            let temp = {
+                label: key.replace(/_/g, ' '),
+                y: cellular[id][key]
+            }
+            if (temp.label != 'seqName' && temp.label != 'Predict')
+                cellularCChartData.push(temp);
         }
 
-        $("#cellular_table_" + id).DataTable({
-            "paging":   false,
-            "info":     false,
-            "searching": false,
-            "order": [[2, "desc"]]
+        CanvasJS.addColorSet("cellularColorSet",
+        [
+        "#0099ff","#ffff00","#ff6600","#00cc66","#ff6699","#ffcc66","#003399","#009999","#cccc00","#003300"
+        ]);
+
+        cellularChart[id] = new CanvasJS.Chart("cellularChartContainer_" + id, {
+            animationEnabled: true,
+            theme: "light2",
+            colorSet: "cellularColorSet",
+            zoomEnabled: true,
+            exportEnabled: true,
+            data: [{
+                type: "column",
+                showInLegend: true, 
+		        legendMarkerColor: "grey",
+		        legendText: "Sub Cellular",
+                dataPoints: cellularCChartData
+            }]
         });
+        // // -------------
+        // // create a list
+        // // -------------
+        // var cellularListContainer = document.createElement("div");
+        // cellularContentBody.appendChild(cellularListContainer);
+        // cellularListContainer.classList.add("table-responsive-sm");
+
+        // var cellularList = document.createElement("table");
+        // cellularListContainer.appendChild(cellularList);
+        // cellularList.classList.add("table");
+        // cellularList.classList.add("table-hover");
+        // cellularList.setAttribute("id", "cellular_table_" + id);
+
+        // var cellularListthead = document.createElement("thead");
+        // cellularList.appendChild(cellularListthead);
+
+        // var cellularListtheadtr = document.createElement("tr");
+        // cellularListthead.appendChild(cellularListtheadtr);
+
+        // var cellularListtheadth0 = document.createElement("th");
+        // cellularListtheadtr.appendChild(cellularListtheadth0);
+        // cellularListtheadth0.setAttribute("scope", "col");
+        // cellularListtheadth0.textContent = "#";
+        // var cellularListtheadth1 = document.createElement("th");
+        // cellularListtheadtr.appendChild(cellularListtheadth1);
+        // cellularListtheadth1.setAttribute("scope", "col");
+        // cellularListtheadth1.textContent = "Name";
+        // var cellularListtheadth2 = document.createElement("th");
+        // cellularListtheadtr.appendChild(cellularListtheadth2);
+        // cellularListtheadth2.setAttribute("scope", "col");
+        // cellularListtheadth2.textContent = "Value";
+
+        // var cellularListtbody = document.createElement("tbody");
+        // cellularList.appendChild(cellularListtbody);
+        // let idx = 1;
+        // for (var key in cellular[id]) {
+        //     let attrName = key;
+        //     let attrValue = cellular[id][key];
+        //     if (attrName == "seqName" || attrName == "Predict") continue;
+
+        //     let tr = document.createElement("tr");
+        //     cellularListtbody.appendChild(tr);
+        //     let th = document.createElement("th");
+        //     tr.appendChild(th);
+        //     th.setAttribute("scope", "row");
+        //     th.textContent = idx++;
+        //     let td1 = document.createElement("td");
+        //     tr.appendChild(td1);
+        //     td1.textContent = attrName;
+        //     let td2 = document.createElement("td");
+        //     tr.appendChild(td2);
+        //     td2.textContent = attrValue;
+        // }
+
+        // $("#cellular_table_" + id).DataTable({
+        //     "paging":   false,
+        //     "info":     false,
+        //     "searching": false,
+        //     "order": [[2, "desc"]]
+        // });
 
         // // ===============================
         // // Create organellar Collapse Components
@@ -205,7 +241,7 @@ $(".selectpicker").change(function () {
         organellarBtn.classList.add("btn-link");
         organellarBtn.setAttribute("data-toggle", "collapse");
         organellarBtn.setAttribute("data-target", "#organellar_" + id);
-        organellarBtn.textContent = "Sub Organellar Prediction: " + organellar[id].Prediction;
+        organellarBtn.textContent = "Sub Organellar Prediction: " + organellar[id].Prediction.replace(/_/g, ' ');
 
         var organellarContent = document.createElement("div");
         organellarCard.appendChild(organellarContent);
@@ -217,66 +253,102 @@ $(".selectpicker").change(function () {
         organellarContentBody.classList.add("card-body");
         organellarContentBody.setAttribute("id", "organellar_content_" + id);
 
+        var organellarChartContainer = document.createElement("div");
+        organellarContentBody.appendChild(organellarChartContainer);
+        organellarChartContainer.setAttribute("id", "organellarChartContainer_" + id);
+        organellarChartContainer.classList.add("chart_container");
+
+        var organellarChartData = [];
+        for (var key in organellar[id]) {
+            let temp = {
+                label: key.replace(/_/g, ' '),
+                y: organellar[id][key]
+            }
+            if (temp.label != 'Prediction')
+                organellarChartData.push(temp);
+        }
+        
+        CanvasJS.addColorSet("organellarColorSet",
+        [
+        "#0099ff","#0099ff","#0099ff","#0099ff","#0099ff","#0099ff","#0099ff","#000066","#ffff00","#ffff00","#ffff00","#ffff00","#ffff00","#ffff00","#ffff00","#ffff00",
+        "#ff6600","#ff6600","#00cc66","#00cc66","#00cc66","#00cc66","#00cc66","#ff6699","#ff6699","#ff6699","#ff6699","#009900","#009900","#ffcc66","#ffcc66","#ffcc66",
+        "#33cccc","#669900","#003399","#003399","#003399","#003399","#003399","#009999","#009999","#009999","#009999","#cccc00","#003300"
+        ]);
+
+        organellarChart[id] = new CanvasJS.Chart("organellarChartContainer_" + id, {
+            animationEnabled: true,
+            colorSet: "organellarColorSet",
+            theme: "light2",
+            zoomEnabled: true,
+            exportEnabled: true,
+            data: [{
+                type: "column",
+                showInLegend: true, 
+		        legendMarkerColor: "grey",
+		        legendText: "Sub Organellar",
+                dataPoints: organellarChartData
+            }]
+        });
         // -------------
         // create a list
         // -------------
-        var organellarListContainer = document.createElement("div");
-        organellarContentBody.appendChild(organellarListContainer);
-        organellarListContainer.classList.add("table-responsive-sm");
+        // var organellarListContainer = document.createElement("div");
+        // organellarContentBody.appendChild(organellarListContainer);
+        // organellarListContainer.classList.add("table-responsive-sm");
 
-        var organellarList = document.createElement("table");
-        organellarListContainer.appendChild(organellarList);
-        organellarList.classList.add("table");
-        organellarList.classList.add("table-hover");
-        organellarList.setAttribute("id", "organellar_table_" + id);
+        // var organellarList = document.createElement("table");
+        // organellarListContainer.appendChild(organellarList);
+        // organellarList.classList.add("table");
+        // organellarList.classList.add("table-hover");
+        // organellarList.setAttribute("id", "organellar_table_" + id);
 
-        var organellarListthead = document.createElement("thead");
-        organellarList.appendChild(organellarListthead);
+        // var organellarListthead = document.createElement("thead");
+        // organellarList.appendChild(organellarListthead);
 
-        var organellarListtheadtr = document.createElement("tr");
-        organellarListthead.appendChild(organellarListtheadtr);
+        // var organellarListtheadtr = document.createElement("tr");
+        // organellarListthead.appendChild(organellarListtheadtr);
 
-        var organellarListtheadth0 = document.createElement("th");
-        organellarListtheadtr.appendChild(organellarListtheadth0);
-        organellarListtheadth0.setAttribute("scope", "col");
-        organellarListtheadth0.textContent = "#";
-        var organellarListtheadth1 = document.createElement("th");
-        organellarListtheadtr.appendChild(organellarListtheadth1);
-        organellarListtheadth1.setAttribute("scope", "col");
-        organellarListtheadth1.textContent = "Name";
-        var organellarListtheadth2 = document.createElement("th");
-        organellarListtheadtr.appendChild(organellarListtheadth2);
-        organellarListtheadth2.setAttribute("scope", "col");
-        organellarListtheadth2.textContent = "Value";
+        // var organellarListtheadth0 = document.createElement("th");
+        // organellarListtheadtr.appendChild(organellarListtheadth0);
+        // organellarListtheadth0.setAttribute("scope", "col");
+        // organellarListtheadth0.textContent = "#";
+        // var organellarListtheadth1 = document.createElement("th");
+        // organellarListtheadtr.appendChild(organellarListtheadth1);
+        // organellarListtheadth1.setAttribute("scope", "col");
+        // organellarListtheadth1.textContent = "Name";
+        // var organellarListtheadth2 = document.createElement("th");
+        // organellarListtheadtr.appendChild(organellarListtheadth2);
+        // organellarListtheadth2.setAttribute("scope", "col");
+        // organellarListtheadth2.textContent = "Value";
 
-        var organellarListtbody = document.createElement("tbody");
-        organellarList.appendChild(organellarListtbody);
-        let idx2 = 1;
-        for (var key in organellar[id]) {
-            let attrName = key;
-            let attrValue = organellar[id][key];
-            if (attrName == "Prediction") continue;
+        // var organellarListtbody = document.createElement("tbody");
+        // organellarList.appendChild(organellarListtbody);
+        // let idx2 = 1;
+        // for (var key in organellar[id]) {
+        //     let attrName = key;
+        //     let attrValue = organellar[id][key];
+        //     if (attrName == "Prediction") continue;
 
-            let tr = document.createElement("tr");
-            organellarListtbody.appendChild(tr);
-            let th = document.createElement("th");
-            tr.appendChild(th);
-            th.setAttribute("scope", "row");
-            th.textContent = idx2++;
-            let td1 = document.createElement("td");
-            tr.appendChild(td1);
-            td1.textContent = attrName;
-            let td2 = document.createElement("td");
-            tr.appendChild(td2);
-            td2.textContent = attrValue;
-        }
+        //     let tr = document.createElement("tr");
+        //     organellarListtbody.appendChild(tr);
+        //     let th = document.createElement("th");
+        //     tr.appendChild(th);
+        //     th.setAttribute("scope", "row");
+        //     th.textContent = idx2++;
+        //     let td1 = document.createElement("td");
+        //     tr.appendChild(td1);
+        //     td1.textContent = attrName;
+        //     let td2 = document.createElement("td");
+        //     tr.appendChild(td2);
+        //     td2.textContent = attrValue;
+        // }
 
-        $("#organellar_table_" + id).DataTable({
-            // "paging":   false,
-            "info":     false,
-            // "searching": false,
-            "order": [[2, "desc"]]
-        });
+        // $("#organellar_table_" + id).DataTable({
+        //     // "paging":   false,
+        //     "info":     false,
+        //     // "searching": false,
+        //     "order": [[2, "desc"]]
+        // });
 
         // // ===================================
         // // Create Weights Collapse Components
@@ -349,6 +421,12 @@ $(".selectpicker").change(function () {
         let id = idList[i];
         $('#weights_' + id).on("shown.bs.collapse", function () {
             chart[id].render();
+        });
+        $('#cellular_' + id).on("shown.bs.collapse", function () {
+            cellularChart[id].render();
+        });
+        $('#organellar_' + id).on("shown.bs.collapse", function () {
+            organellarChart[id].render();
         });
     }
 

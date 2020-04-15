@@ -176,7 +176,7 @@ router.get("/jobs/:id", function (req, res) {
 					Membrane_coated_pit: parseFloat(strarr[25].substring(strarr[25].indexOf(':') + 1)),
 					Membrane_raft: parseFloat(strarr[26].substring(strarr[26].indexOf(':') + 1)),
 					Membrane_caveola: parseFloat(strarr[27].substring(strarr[27].indexOf(':') + 1)),
-					Cel_membrane: parseFloat(strarr[28].substring(strarr[28].indexOf(':') + 1)),
+					Cell_membrane: parseFloat(strarr[28].substring(strarr[28].indexOf(':') + 1)),
 					Cell_surface: parseFloat(strarr[29].substring(strarr[29].indexOf(':') + 1)),
 					Endoplasmic_reticulum_lumen: parseFloat(strarr[30].substring(strarr[30].indexOf(':') + 1)),
 					Endoplasmic_reticulum_membrane: parseFloat(strarr[31].substring(strarr[31].indexOf(':') + 1)),

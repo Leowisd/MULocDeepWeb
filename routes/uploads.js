@@ -33,14 +33,27 @@ router.get("/upload/:id", function (req, res) {
 			else if (docs[0].status === 'Processing') {
 				flag = -1;
 			}
-		res.render("JOBINFO", { jobId: jobId, flag: flag, number: number });
+		res.render("JOBINFO", { jobId: jobId, flag: flag, number: number, time: 'XXmin XXs' });
 	});
 });
 
 // Add-on email submit on job info page
 router.post("/upload/email", function(req, res){
-	console.log(req.body.emailInput.trim());
-	console.log(req.body.jobIDStatic);
+	let email = req.body.email.trim();
+	let jobID = req.body.jobID.trim();
+	jobInfo.findOne({ _id: jobID }, function (err, doc) {
+		if (err) console.error(err);
+		let update = { $set: { email:  email} };
+		jobInfo.updateOne({ _id: jobID }, update, function (err, u) {
+			if (err)
+				console.log(err);
+			else {
+				console.log("Job email was added!");
+				console.log("Email: " + email + " of job:" + jobID);
+				console.log("======================================");
+			}
+		});
+	});
 });
 
 //Deal with sequence post
