@@ -15,7 +15,8 @@ $('#copyBtn').click(function () {
     if (document.execCommand('copy')) {
         document.execCommand('copy');
         // console.log('copy success');
-        alert("Copy Success!");
+        $('#infoModalBody').text("Copy Success!");
+        $('#infoModal').modal('show');
     }
     document.body.removeChild(input);
 })
@@ -31,10 +32,12 @@ $('#emailBtn').click(function(){
         $.post(url, data, function(data, status){
         });
         document.getElementById('emailInput').value = "";
-        alert("Submit Success!");
+        $('#infoModalBody').text("Submit Success!");
+        $('#infoModal').modal('show');
     }
     else{
-        alert("Please input valid email address!");
+        $('#infoModalBody').text("Please input valid email address!");
+        $('#infoModal').modal('show');
     }
     
 })

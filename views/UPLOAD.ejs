@@ -63,13 +63,14 @@
         <div class="tab-content pb-3" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-Sequence" role="tabpanel"
                 aria-labelledby="pills-Sequence-tab">
-                <form class="prediction" action="/upload/sequence" method="POST">
+                <form class="prediction" action="/upload/sequence" method="POST" onsubmit="return checkSeqValid()">
                     <div class="form-row">
                         <div class="form-group col-12 col-lg-6">
                             <label for="sequenceInput">Sequence</label>
                             <textarea class="form-control" id="sequenceInput" name="sequenceInput" rows="6"
                                 aria-describedby="sequenceHelp" required></textarea>
-                            <small id="sequenceHelp" class="form-text text-muted">The sequence must in FASTA format.
+                            <small id="sequenceHelp" class="form-text text-muted">The sequence(s) must in FASTA format
+                                (maximum 25 sequences).
                             </small>
                         </div>
                     </div>
@@ -105,11 +106,11 @@
                             <p>Upload file</p>
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="fileSelect" name="fileSelect"
-                                    aria-describedby="fileHelp" required>
+                                    aria-describedby="fileHelp" onchange="checkFileValid()" required>
                                 <label id="fileLabel" class="custom-file-label text-truncate" for="fileSelect">Choose
                                     file</label>
                                 <small id="fileHelp" class="form-text text-muted">The file uploaded should contains only
-                                    protein sequence in FASTA format.</small>
+                                    protein sequence(s) in FASTA format (maximum 25 sequences).</small>
                             </div>
                         </div>
                     </div>
@@ -145,6 +146,26 @@
         <p>
             MULocDeep: Protein locator using deep learning.
         </p>
+    </div>
+
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="errorModalBody">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script type="text/javascript" src="/js/upload.js"></script>

@@ -38,6 +38,14 @@ model_small.load_weights('./MULocDeep/cpu_models/fold' + str(foldnum) + '_big_lv
 10.  search ID ? IP
 ### version 1.1
 11. ~~add email input on job waiting page, update database~~
-12. ~~add estimated time on job waiting page~~, add time function
+12. ~~add estimated time on job waiting page, add time function~~
 13. ~~change the index to upload page~~
-14. ~~change the results of predicting to bar chart~~, 是不是完全对应？
+14. ~~change the results of predicting to bar chart~~
+15. ~~add check function on vliad FASTA file~~
+16. delete pssm file after predicting
+17. ~~change two alerts of uploading to font-end/add two error pages.~~
+
+## Problem
+1. predict.py, predicting query like >Medtr2g018290.1;AT4G32520.2 wrong.
+2. two types results catelogs different?
+3. predicting 2000 querys needs more than 6GB memory for GPU, so may need set the number of submit boundary.

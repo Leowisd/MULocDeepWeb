@@ -58,7 +58,7 @@
   <div class="container" data-step="1" data-intro="You can check your capacity here.">
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
       <strong>User:</strong> Your IP is <%= ip%>. Your current capacity is
-      <%= (capacity/1024/1024).toFixed(4)%>MB/<%= 50%> MB
+      <%= (capacity/1024/1024).toFixed(2)%>MB/<%= 50%> MB
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -134,10 +134,19 @@
             <i class="fas fa-times"></i>
             <%}%>
           <td>
-            <a class="btn btn-primary" href="/jobs/:<%= element.id %>" style="color:white;text-decoration:none;"><i
-              class="fas fa-glasses"></i></a>
-            <button class="btn btn-danger" onclick="deleteTr(this)"><i class="far fa-trash-alt"></i></button>
-            </td>
+            <% if (element.status === 'Done'){%>
+              <a class="btn btn-primary" href="/jobs/:<%= element.id %>" style="color:white;text-decoration:none;"><i class="far fa-hand-point-up"></i></a>
+              <button class="btn btn-danger" onclick="deleteTr(this)"><i class="far fa-trash-alt"></i></button>
+            <% } else if (element.status === 'Processing' || element.status === 'queued') { %>
+              <!-- <a class="btn btn-primary" href="/jobs/:<%= element.id %>" style="color:white;text-decoration:none;" ><i class="far fa-hand-point-up"></i></a> -->
+              <button class="btn btn-danger" onclick="deleteTr(this)" disabled><i class="far fa-hand-point-up"></i></button>
+              <button class="btn btn-danger" onclick="deleteTr(this)" disabled><i class="far fa-trash-alt"></i></button>
+            <%} else if (element.status === 'error'){%>
+              <!-- <a class="btn btn-primary" href="/jobs/:<%= element.id %>" style="color:white;text-decoration:none;"><i class="far fa-hand-point-up"></i></a> -->
+              <button class="btn btn-danger" onclick="deleteTr(this)" disabled><i class="far fa-hand-point-up"></i></button>              
+              <button class="btn btn-danger" onclick="deleteTr(this)"><i class="far fa-trash-alt"></i></button>
+            <%}%>
+          </td>
           </tr>
           <% })%>
         </tbody>
