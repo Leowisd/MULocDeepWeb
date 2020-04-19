@@ -8,8 +8,10 @@ var uploadsRoutes = require("./routes/uploads"),
 	resultsRoutes = require("./routes/results"),
 	indexRoutes = require("./routes/index"),
 	processRoutes = require("./routes/process");
-
-mongoose.connect("mongodb://localhost/mulocdeep");
+// Docker
+mongoose.connect("mongodb://mongodb/mulocdeep");
+// Local
+// mongoose.connect("mongodb://localhost/mulocdeep");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
@@ -25,7 +27,7 @@ app.get("*", function (req, res) {
 	res.render("404");
 });
 
-app.listen(3000, process.env.IP, function () {
-	console.log("The MULocDeep Server Has Started At: http://localhost:3000/");
+app.listen(5000, process.env.IP, function () {
+	console.log("The MULocDeep Server Has Started At: http://localhost:5000/");
 	console.log("");
 })

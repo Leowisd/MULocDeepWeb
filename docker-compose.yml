@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    restart: always
+    volumes:
+      - ~/data/db:/data/db
+    networks:
+      - webapp-network
+  web:
+    build: .
+    container_name: mulocdeepweb
+    image: mulocdeep
+    restart: always
+    ports:
+      - '5000:5000'
+    depends_on:
+      - mongodb
+    networks:
+      - webapp-network
+networks:
+  webapp-network:
+    driver: bridge

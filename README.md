@@ -24,6 +24,12 @@ line 396:
 model_small.load_weights('./MULocDeep/cpu_models/fold' + str(foldnum) + '_big_lv1_acc-weights.hdf5')
 ```
 
+## Docker
+```
+docker-compose up -d
+```
+Visit heep://localhost:5000/
+
 ## To do List
 
 1. ~~Modify the display page~~
@@ -44,6 +50,7 @@ model_small.load_weights('./MULocDeep/cpu_models/fold' + str(foldnum) + '_big_lv
 15. ~~add check function on vliad FASTA file~~
 16. delete pssm file after predicting
 17. ~~change two alerts of uploading to font-end/add two error pages.~~
+18. ~~Set Docker.~~
 
 ## Problem
 1. predict.py, predicting query like >Medtr2g018290.1;AT4G32520.2 wrong.
