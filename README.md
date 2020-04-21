@@ -28,7 +28,7 @@ model_small.load_weights('./MULocDeep/cpu_models/fold' + str(foldnum) + '_big_lv
 ```
 docker-compose up -d
 ```
-Visit heep://localhost:5000/
+Visit heep://localhost:8082/
 
 ## To do List
 

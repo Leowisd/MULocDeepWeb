@@ -2,9 +2,12 @@ version: '3'
 
 services:
   mongodb:
-    container_name: mongodb
-    image: mongo
+    container_name: mulocdeepdb
+    image: mongo:4.2.1
     restart: always
+    command: mongod --port 65521
+    ports:
+      - "65521:65521"
     volumes:
       - ~/data/db:/data/db
     networks:
@@ -15,7 +18,7 @@ services:
     image: mulocdeep
     restart: always
     ports:
-      - '5000:5000'
+      - '8082:8082'
     depends_on:
       - mongodb
     networks:
