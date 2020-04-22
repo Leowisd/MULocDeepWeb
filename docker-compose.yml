@@ -15,7 +15,7 @@ services:
   web:
     build: .
     container_name: mulocdeepweb
-    image: mulocdeep
+    image: mulocdeep/mulocdeepweb
     restart: always
     ports:
       - '8082:8082'

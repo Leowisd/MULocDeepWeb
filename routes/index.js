@@ -29,6 +29,10 @@ router.get("/contact", function (req, res) {
 	res.render("CONTACT");
 });
 
+router.get("/tools", function (req, res) {
+	res.render("TOOLS");
+});
+
 // Set a rule schedule to run tasks per 5s
 var rule = new schedule.RecurrenceRule();
 var ruleTime = [1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56];
