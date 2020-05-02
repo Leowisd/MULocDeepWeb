@@ -76,7 +76,7 @@ router.post("/upload/sequence", function (req, res) {
 	// Create a new file and write the sequence in
 	console.log("Data written ready...");
 
-	fs.writeFileSync('data/upload/' + job.file, sequence);
+	fs.writeFileSync('data/upload/' + job.file, format(sequence));
 	console.log("Data written success!");
 	console.log("======================================");
 
@@ -219,7 +219,7 @@ router.post("/upload/file", function (req, res) {
 	job.file = job.id + '.fa';
 
 	var data = fs.readFileSync(req.files[0].path);
-	fs.writeFileSync('data/upload/' + job.file, data);
+	fs.writeFileSync('data/upload/' + job.file, format(data.toString()));
 	console.log('File: ' + req.files[0].originalname + ' uploaded successfully');
 	console.log("======================================");
 
@@ -347,8 +347,29 @@ router.post("/upload/file", function (req, res) {
 });
 
 function get_client_ip(req) {
-	var ipStr = req.ip.split(':');
+	var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+	ipStr = ip.split(':');
 	return ipStr[ipStr.length - 1];
 };
+
+// Change mulit lines seq to one seq
+function format(seq){
+	let data = seq.trim().split('>');
+	var res = "";
+    for (let i = 0; i < data.length; i++) {
+        let fasta = data[i];
+
+        if (!fasta) continue;
+		let lines = fasta.split(/\r?\n/);
+		res = res + '>' + lines[0] + '\n';
+        lines.splice(0, 1);
+		// join the array back into a single string without newlines and 
+        // trailing or leading spaces
+		fasta = lines.join('').trim();
+		res = res + fasta + '\n';
+	}
+	// console.log(res);
+	return res.trim();
+}
 
 module.exports = router;

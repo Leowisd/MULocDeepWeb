@@ -39,7 +39,8 @@ router.post("/result/seq", function (req, res) {
 });
 
 function get_client_ip(req) {
-	var ipStr = req.ip.split(':');
+	var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+	ipStr = ip.split(':');
 	return ipStr[ipStr.length - 1];
 };
 

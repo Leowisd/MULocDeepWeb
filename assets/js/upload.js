@@ -16,42 +16,54 @@ $('#sample').click(function () {
 })
 
 function checkSeqValid() {
-    let data = $('#sequenceInput').val().trim().split('\n');
-    // console.log(data);
-    for (let i = 0; i < data.length; i++) {
-
-        if (!data[i]){
-            $('#errorModalBody').text("Sequences are not valid.");
-            $('#errorModal').modal('show');
-            return false;
-        }
-        data[i] = data[i].trim();
-        if (!data[i]){
-            $('#errorModalBody').text("Sequences are not valid.");
-            $('#errorModal').modal('show');
-            return false;
-        }
-
-        if (i % 2 == 0) {
-            if (data[i][0] != '>') {
-                $('#errorModalBody').text("The name of sequence " + data[i] + " is not valid.");
-                $('#errorModal').modal('show');
-                return false;
-            }
-        }
-        else {
-            if (data[i].search(/[^ACDEFGHIKLMNPQRSTUVWY\s]/i) != -1) {
-                $('#errorModalBody').text("The sequence " + data[i - 1] + " is not valid. Please check and input valid sequence(s).");
-                $('#errorModal').modal('show');
-                return false;
-            }
-        }
-    }
-    if (data.length > 50) {
-        $('#errorModalBody').text("The number of sequences: " + data.length / 2 + " is out of the limit: 25");
+    let seq = $('#sequenceInput').val().trim();
+    if (!seq){
+        $('#errorModalBody').text("Sequences are not valid.");
         $('#errorModal').modal('show');
         return false;
     }
+
+    let data = seq.split('>');
+    let num = 0;
+    for (let i = 0; i < data.length; i++) {
+        let fasta = data[i];
+        if (i == 0 && fasta){
+            $('#errorModalBody').text("Sequences are not valid.");
+            $('#errorModal').modal('show');
+            return false;
+        }
+        if (!fasta) continue;
+
+        let lines = fasta.split(/\r?\n/);
+        lines.splice(0, 1);
+
+        // join the array back into a single string without newlines and 
+        // trailing or leading spaces
+        fasta = lines.join('').trim();
+
+        if (!fasta) { // is it empty whatever we collected ? re-check not efficient 
+            $('#errorModalBody').text("Sequences are not valid.");
+            $('#errorModal').modal('show');
+            return false;
+        }
+        // console.log(fasta);
+        // return false;
+
+        // note that the empty string is caught above
+        // allow for Selenocysteine (U)
+        if (/^[ACDEFGHIKLMNPQRSTUVWY\s]+$/i.test(fasta) == false){
+            $('#errorModalBody').text("Sequences are not valid.");
+            $('#errorModal').modal('show');
+            return false;
+        }
+        num = num + 1;
+    }
+    if (num > 25){
+        $('#errorModalBody').text("The number of sequences " + num + " is out of the limit: 25.");
+        $('#errorModal').modal('show');
+        return false;
+    }
+    return true;
 }
 
 function checkFileValid() {
@@ -64,40 +76,52 @@ function checkFileValid() {
     let reader = new FileReader();//新建一个FileReader
     reader.readAsText(files[0], "UTF-8");//读取文件
     reader.onload = function (evt) { //读取完文件之后会回来这里
-        let data = evt.target.result.trim().split('\n'); // 读取文件内容
-        for (let i = 0; i < data.length; i++) {
 
-            if (!data[i]){
-                $('#errorModalBody').text("Sequences are not valid.");
-                $('#errorModal').modal('show');
-                document.getElementById("reset").click();
-            };
-            data[i] = data[i].trim();
-            if (!data[i]) {
-                $('#errorModalBody').text("Sequences are not valid.");
-                $('#errorModal').modal('show');
-                document.getElementById("reset").click();
-            };
-
-            if (i % 2 == 0) {
-                if (data[i][0] != '>') {
-                    $('#errorModalBody').text("The name of sequence " + data[i] + " is not valid.");
-                    $('#errorModal').modal('show');
-                    document.getElementById("reset").click();
-                }
-            }
-            else {
-                if (data[i].search(/[^ACDEFGHIKLMNPQRSTUVWY\s]/i) != -1) {
-                    $('#errorModalBody').text("The sequence " + data[i - 1] + " is not valid. Please check and input valid sequences.");
-                    $('#errorModal').modal('show');
-                    document.getElementById("reset").click();
-                }
-            }
-        }
-        if (data.length > 50) {
-            $('#errorModalBody').text("The number of sequences " + data.length / 2 + " is out of the limit: 25.");
+        let seq = evt.target.result.trim().split(/\r?\n/); // 读取文件内容
+        if (!seq){
+            $('#errorModalBody').text("Sequences are not valid.");
             $('#errorModal').modal('show');
-            document.getElementById("reset").click();
+            return false;
         }
+            
+        let data = seq.split('>');
+        let num = 0;
+        for (let i = 0; i < data.length; i++) {
+            let fasta = data[i];
+            if (i == 0 && fasta){
+                $('#errorModalBody').text("Sequences are not valid.");
+                $('#errorModal').modal('show');
+                return false;
+            }
+            if (!fasta) continue;
+
+            let lines = fasta.split(/\r?\n/);
+            lines.splice(0, 1);
+
+            // join the array back into a single string without newlines and 
+            // trailing or leading spaces
+            fasta = lines.join('').trim();
+
+            if (!fasta) { // is it empty whatever we collected ? re-check not efficient 
+                $('#errorModalBody').text("Sequences are not valid.");
+                $('#errorModal').modal('show');
+                return false;
+            }
+
+            // note that the empty string is caught above
+            // allow for Selenocysteine (U)
+            if(/^[ACDEFGHIKLMNPQRSTUVWY\s]+$/i.test(fasta) == false){
+                $('#errorModalBody').text("Sequences are not valid.");
+                $('#errorModal').modal('show');
+                return false;
+            }
+            num = num + 1;
+        }
+        if (num > 25){
+            $('#errorModalBody').text("The number of sequences " + num + " is out of the limit: 25.");
+            $('#errorModal').modal('show');
+            return false;
+        }
+        return true;
     }
 }

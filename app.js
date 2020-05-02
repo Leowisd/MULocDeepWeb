@@ -9,10 +9,11 @@ var uploadsRoutes = require("./routes/uploads"),
 	indexRoutes = require("./routes/index"),
 	processRoutes = require("./routes/process");
 // Docker
-mongoose.connect("mongodb://mulocdeepdb:65521/mulocdeep");
+// mongoose.connect("mongodb://mulocdeepdb:65521/mulocdeep");
 // Local
-// mongoose.connect("mongodb://localhost/mulocdeep");
+mongoose.connect("mongodb://localhost/mulocdeep");
 
+// app.enable('trust proxy');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.use(express.static('assets'))

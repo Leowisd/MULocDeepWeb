@@ -28,7 +28,7 @@ $(function () {
 // ============================
 // To show all results at first
 // ============================
-setTimeout("helper()",100);  
+setTimeout("helper()",500);  
 function helper(){
     $('.selectpicker').selectpicker('selectAll');
 }
