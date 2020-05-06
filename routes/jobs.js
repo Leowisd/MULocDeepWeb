@@ -286,6 +286,10 @@ function deleteFolder(path) {
 				});
 			}
 		});
+		files = fs.readdirSync(path);
+		while(files.length != 0){
+			files = fs.readdirSync(path);
+		}
 		fs.rmdir(path, function (err) {
 			if (err) console.error(err);
 		});

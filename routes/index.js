@@ -9,6 +9,7 @@ var sd = require("silly-datetime"),
 exec = require('child_process').exec;
 
 var jobInfo = require("../models/jobInfo");
+var userInfo = require("../models/userInfo");
 var transporter = require("../models/emailConfig");
 
 // Set Process Count and Wailting List
@@ -21,7 +22,7 @@ router.get("/", function (req, res) {
 	res.render("UPLOAD");
 });
 
-router.get("/map", function(req, res){
+router.get("/map", function (req, res) {
 	res.render("MAP");
 });
 
@@ -167,47 +168,38 @@ schedule.scheduleJob(rule, function () {
 
 // clean data per week
 // schedule.scheduleJob('0 * * * * *', function () {
+schedule.scheduleJob('0 0 0 * * 0', function () {
+	console.log("Schedule jobs cleaning begins...");
+	var curTime = moment().utcOffset("-06:00").format('YYYY-MM-DD HH:mm:ss');
+	var curDay = parseInt(curTime.substring(8, 10));
+	var curMonth = parseInt(curTime.substring(5, 7));
+	var curYear = parseInt(curTime.substring(0, 4));
+	curDay -= 7;
+	if (curDay <= 0) {
+		curDay = 30 + curDay;
+		curMonth--;
+		if (curMonth <= 0) {
+			curMonth = 12 + curMonth;
+			curYear--;
+		}
+	}
+	var due = curYear + "-" + curMonth + "-" + curDay + " 00:00:00";
+	// var due = '2020' + "-" + curMonth + "-" + curDay + " 00:00:00";
 
-// schedule.scheduleJob('0 0 0 * * 0', function () {
-// 	var curTime = moment().utcOffset("-06:00").format('YYYY-MM-DD HH:mm:ss');
-// 	var curDay = parseInt(curTime.substring(8, 10));
-// 	var curMonth = parseInt(curTime.substring(5, 7));
-// 	var curYear = parseInt(curTime.substring(0, 4));
-// 	curDay -= 7;
-// 	if (curDay <= 0) {
-// 		curDay = 30 + curDay;
-// 		curMonth--;
-// 		if (curMonth <= 0) {
-// 			curMonth = 12 + curMonth;
-// 			curYear--;
-// 		}
-// 	}
-// 	var due = curYear + "-" + curMonth + "-" + curDay + " 00:00:00";
-// 	// var due = '2020' + "-" + curMonth + "-" + curDay + " 00:00:00";
-
-// 	jobInfo.find({ 'submittedTime': { $lte: due } }, function (err, docs) {
-// 		if (err)
-// 			return console.error(err);
-// 		if (docs != undefined) {
-// 			for (var i = 0; i < docs.length; i++) {
-// 				var dFile = docs[i].file;
-
-// 				deleteFolder('data/results/' + docs[i].id);
-// 				fs.unlink('data/upload/' + dFile, function (err) {
-// 					if (err) console.error(err);
-// 				});
-// 			}
-// 		}
-// 		return console.log("Clean Old Tasks Files at:" + curTime);
-// 	});
-
-// 	jobInfo.deleteMany({ 'submittedTime': { $lte: due } }, function (err) {
-// 		if (err)
-// 			return console.error(err);
-// 		return console.log("Clean Old Tasks Historys at:" + curTime);
-// 	});
-
-// });
+	jobInfo.find({ 'submittedTime': { $lte: due } }, function (err, docs) {
+		if (err)
+			return console.error(err);
+		if (docs != undefined) {
+			asyncLoop(0, docs, function(){
+				jobInfo.deleteMany({ 'submittedTime': { $lte: due } }, function (err) {
+					if (err)
+						return console.error(err);
+					return console.log("Clean Old Tasks Historys and Files at:" + curTime);
+				});
+			});
+		}
+	});
+});
 
 function deleteFolder(path) {
 	let files = [];
@@ -223,9 +215,41 @@ function deleteFolder(path) {
 				});
 			}
 		});
+		files = fs.readdirSync(path);
+		while(files.length != 0){
+			files = fs.readdirSync(path);
+		}
 		fs.rmdir(path, function (err) {
 			if (err) console.error(err);
 		});
+	}
+}
+
+function asyncLoop(i, docs, callback){
+	if (i < docs.length){
+		let dUser = docs[i].ipAddress;
+		let fileSize = fs.statSync('data/upload/' + docs[i].file).size * 220;
+		let dFile = docs[i].file;
+		let dID = docs[i].id;
+		userInfo.findOne({ 'ipAddress': dUser }, function (err, user) {
+			if (err) {
+				console.error(err);
+			}
+
+			var update = { $set: { capacity: user.capacity - fileSize } };
+			userInfo.updateOne({ 'ipAddress': dUser }, update, function (err, u) {
+				if (err)
+					console.error(err);
+				deleteFolder('data/results/' + dID);
+				fs.unlink('data/upload/' + dFile, function (err) {
+					if (err) console.error(err);
+				});
+				asyncLoop(i + 1, docs, callback);
+			});	
+		});
+	}
+	else {
+		callback();
 	}
 }
 

@@ -1,6 +1,6 @@
 # MULocDeepWeb
 
-Version 1.0 -> 1.1
+Version 1.1
 
 ## System
 
@@ -51,8 +51,9 @@ Visit heep://localhost:8082/
 16. delete pssm file after predicting
 17. ~~change two alerts of uploading to font-end/add two error pages.~~
 18. ~~Set Docker.~~
+19. ~~recover the auto delete model * fix delete folder bug.~~ change shcedule to each day
+20. ~~change the MAP page UI~~
 
 ## Problem
-1. predict.py, predicting query like >Medtr2g018290.1;AT4G32520.2 wrong.
+1. ~~predict.py, predicting query like >Medtr2g018290.1;AT4G32520.2 wrong.~~(temp solution: replace ; with :)
 2. two types results catelogs different?
-3. predicting 2000 querys needs more than 6GB memory for GPU, so may need set the number of submit boundary.

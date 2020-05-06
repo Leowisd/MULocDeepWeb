@@ -38,23 +38,6 @@
     </div>
   </nav>
 
-  <div class="container col-12 col-lg-8">
-    <div id="carouselExampleSlidesOnly" class="carousel slide carousel-fade" data-ride="carousel">
-      <div class="carousel-inner" data-step="7" data-intro="Our website using infomation">
-        <div class="carousel-item">
-          <p class="text-center" id="userNumber"></p>
-        </div>
-        <div class="carousel-item">
-          <p class="text-center" id="queryNumber"></p>
-        </div>
-        <div class="carousel-item active">
-          <p class="text-center"> Welcome to MULocDeep</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
   <div id="map" data-step="9" data-intro="Our users around the world!"></div>
 
   <div class="container border shadow-lg col-0 col-lg-4" id="welcomeCard">
@@ -66,11 +49,10 @@
             A protein locator based on deep learning predicting
           </p>
           <hr>
-          <a href="/upload" class="btn btn-primary btn-lg mb-3" role="button" aria-pressed="true" data-step="8"
-            data-intro="Go to upload page.">
-            <i class="fa fa-paw fa-fw"></i>
-            Get Prediction!
-          </a>
+          <h6 id="userNumHead" style="display: none;"> The number of users</h6>
+          <div id="userNumber" style="display: none;"></div>
+          <h6 id="queryNumHead" style="display: none;"> The number of queries</h6>
+          <div id="queryNumber" style="display: none;"></div>
         </div>
       </div>
     </div>

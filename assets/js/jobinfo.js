@@ -2,7 +2,7 @@
 function myrefresh() {
     window.location.reload();
 }
-setTimeout('myrefresh()', 10000); //10s refresh
+setInterval('myrefresh()', 10000); //10s refresh
 
 // create a copy button
 $('#copyBtn').click(function () {

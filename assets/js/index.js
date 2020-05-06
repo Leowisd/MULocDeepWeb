@@ -33,15 +33,17 @@ var map = new Datamap({
     }, sleep);
   })
 
-
+  $("#userNumHead").fadeIn(1000);
+  $("#userNumber").fadeIn(1000);
   var statisticUserURL = '/process/statistic/users';
   $.get(statisticUserURL, function (data, status) {
-    var userNumber = document.getElementById("userNumber");
-    userNumber.textContent = "The number of total user is: " + data.user;
+    $("#userNumber").numberAnimate({num: data.user, speed:3000, symbol:","});
   });
 
+  $("#queryNumHead").fadeIn(2000);
+  $("#queryNumber").fadeIn(2000);
   var statisticQueryURL = '/process/statistic/querys';
   $.get(statisticQueryURL, function (data, status) {
-    var queryNumber = document.getElementById("queryNumber");
-    queryNumber.textContent = "The number of total querys is: " + data.querys;
+    $("#queryNumber").numberAnimate({num: data.querys, speed:4000, symbol:","});
   });
+

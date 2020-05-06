@@ -2,7 +2,7 @@
 function myrefresh() {
     window.location.reload();
 }
-setTimeout('myrefresh()', 200000); //20s refresh
+setInterval('myrefresh()', 20000); //20s refresh
 
 $(document).ready(function () {
     $('#table').DataTable({
