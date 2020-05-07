@@ -166,15 +166,15 @@ schedule.scheduleJob(rule, function () {
 	}
 });
 
-// clean data per week
+// clean data per day
 // schedule.scheduleJob('0 * * * * *', function () {
-schedule.scheduleJob('0 0 0 * * 0', function () {
+schedule.scheduleJob('0 0 0 * * *', function () {
 	console.log("Schedule jobs cleaning begins...");
 	var curTime = moment().utcOffset("-06:00").format('YYYY-MM-DD HH:mm:ss');
 	var curDay = parseInt(curTime.substring(8, 10));
 	var curMonth = parseInt(curTime.substring(5, 7));
 	var curYear = parseInt(curTime.substring(0, 4));
-	curDay -= 7;
+	curDay -= 8; //loose to 8 days
 	if (curDay <= 0) {
 		curDay = 30 + curDay;
 		curMonth--;

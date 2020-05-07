@@ -18,7 +18,7 @@ $('#sample').click(function () {
 function checkSeqValid() {
     let seq = $('#sequenceInput').val().trim();
     if (!seq){
-        $('#errorModalBody').text("Sequences are not valid.");
+        $('#errorModalBody').text("Query cannot be empty.");
         $('#errorModal').modal('show');
         return false;
     }
@@ -28,7 +28,7 @@ function checkSeqValid() {
     for (let i = 0; i < data.length; i++) {
         let fasta = data[i];
         if (i == 0 && fasta){
-            $('#errorModalBody').text("Sequences are not valid.");
+            $('#errorModalBody').text("The description of queries must begin with >." );
             $('#errorModal').modal('show');
             return false;
         }
@@ -42,7 +42,7 @@ function checkSeqValid() {
         fasta = lines.join('').trim();
 
         if (!fasta) { // is it empty whatever we collected ? re-check not efficient 
-            $('#errorModalBody').text("Sequences are not valid.");
+            $('#errorModalBody').text("Query must contain amino acid code sequence.");
             $('#errorModal').modal('show');
             return false;
         }
@@ -52,10 +52,18 @@ function checkSeqValid() {
         // note that the empty string is caught above
         // allow for Selenocysteine (U)
         if (/^[ACDEFGHIKLMNPQRSTUVWY\s]+$/i.test(fasta) == false){
-            $('#errorModalBody').text("Sequences are not valid.");
+            $('#errorModalBody').text("Sequences must be in valid amino acid code(A, C, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, U, V, W, Y).");
             $('#errorModal').modal('show');
             return false;
         }
+
+        // test if there is any space in the sequence
+        if ((/\s/).test(fasta) == true){
+            $('#errorModalBody').text("Sequences cannot consist any space.");
+            $('#errorModal').modal('show');
+            return false;
+        }
+
         num = num + 1;
     }
     if (num > 25){
@@ -79,7 +87,7 @@ function checkFileValid() {
 
         let seq = evt.target.result.trim().split(/\r?\n/); // 读取文件内容
         if (!seq){
-            $('#errorModalBody').text("Sequences are not valid.");
+            $('#errorModalBody').text("Query cannot be empty.");
             $('#errorModal').modal('show');
             return false;
         }
@@ -89,7 +97,7 @@ function checkFileValid() {
         for (let i = 0; i < data.length; i++) {
             let fasta = data[i];
             if (i == 0 && fasta){
-                $('#errorModalBody').text("Sequences are not valid.");
+                $('#errorModalBody').text("The description of query must begin with >.");
                 $('#errorModal').modal('show');
                 return false;
             }
@@ -103,7 +111,7 @@ function checkFileValid() {
             fasta = lines.join('').trim();
 
             if (!fasta) { // is it empty whatever we collected ? re-check not efficient 
-                $('#errorModalBody').text("Sequences are not valid.");
+                $('#errorModalBody').text("Query must contain amino acid code sequence.");
                 $('#errorModal').modal('show');
                 return false;
             }
@@ -111,10 +119,18 @@ function checkFileValid() {
             // note that the empty string is caught above
             // allow for Selenocysteine (U)
             if(/^[ACDEFGHIKLMNPQRSTUVWY\s]+$/i.test(fasta) == false){
-                $('#errorModalBody').text("Sequences are not valid.");
+                $('#errorModalBody').text("Sequences must be in valid amino acid code(A, C, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, U, V, W, Y).");
                 $('#errorModal').modal('show');
                 return false;
             }
+
+            // test if there is any space in the sequence
+            if ((/\s/).test(fasta) == true){
+                $('#errorModalBody').text("Sequences cannot consist any space.");
+                $('#errorModal').modal('show');
+                return false;
+            }
+
             num = num + 1;
         }
         if (num > 25){
