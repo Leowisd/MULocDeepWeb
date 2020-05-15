@@ -51,23 +51,16 @@ function checkSeqValid() {
 
         // note that the empty string is caught above
         // allow for Selenocysteine (U)
-        if (/^[ACDEFGHIKLMNPQRSTUVWY\s]+$/i.test(fasta) == false){
-            $('#errorModalBody').text("Sequences must be in valid amino acid code(A, C, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, U, V, W, Y).");
-            $('#errorModal').modal('show');
-            return false;
-        }
-
-        // test if there is any space in the sequence
-        if ((/\s/).test(fasta) == true){
-            $('#errorModalBody').text("Sequences cannot consist any space.");
+        if (/^[ACDEFGHIKLMNPQRSTUVWY]+$/i.test(fasta) == false){
+            $('#errorModalBody').text("Sequences must be in valid amino acid code(A, C, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, U, V, W, Y) without any space.");
             $('#errorModal').modal('show');
             return false;
         }
 
         num = num + 1;
     }
-    if (num > 25){
-        $('#errorModalBody').text("The number of sequences " + num + " is out of the limit: 25.");
+    if (num > 500){
+        $('#errorModalBody').text("The number of sequences " + num + " is out of the limit: 500.");
         $('#errorModal').modal('show');
         return false;
     }
@@ -118,23 +111,16 @@ function checkFileValid() {
 
             // note that the empty string is caught above
             // allow for Selenocysteine (U)
-            if(/^[ACDEFGHIKLMNPQRSTUVWY\s]+$/i.test(fasta) == false){
-                $('#errorModalBody').text("Sequences must be in valid amino acid code(A, C, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, U, V, W, Y).");
-                $('#errorModal').modal('show');
-                return false;
-            }
-
-            // test if there is any space in the sequence
-            if ((/\s/).test(fasta) == true){
-                $('#errorModalBody').text("Sequences cannot consist any space.");
+            if(/^[ACDEFGHIKLMNPQRSTUVWY]+$/i.test(fasta) == false){
+                $('#errorModalBody').text("Sequences must be in valid amino acid code(A, C, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, U, V, W, Y) without any space.");
                 $('#errorModal').modal('show');
                 return false;
             }
 
             num = num + 1;
         }
-        if (num > 25){
-            $('#errorModalBody').text("The number of sequences " + num + " is out of the limit: 25.");
+        if (num > 500){
+            $('#errorModalBody').text("The number of sequences " + num + " is out of the limit: 500.");
             $('#errorModal').modal('show');
             return false;
         }

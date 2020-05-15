@@ -361,8 +361,8 @@ function format(seq){
 
         if (!fasta) continue;
 		let lines = fasta.split(/\r?\n/);
-		res = res + '>' + lines[0].replace(/;/, ':') + '\n';
-        lines.splice(0, 1);
+		res = res + '>' + lines[0] + '\n';
+		lines.splice(0, 1);
 		// join the array back into a single string without newlines and 
         // trailing or leading spaces
 		fasta = lines.join('').trim();

@@ -46,7 +46,7 @@
     <div class="jumbotron jumbotron-fluid text-center">
         <div class="container">
             <h1 class="display-4"><span class="border-bottom border-dark p-1">MULocDeep</span></h1>
-            <p class="lead d-none d-sm-block">A protein locator based on deep learning predicting</p>
+            <p class="lead d-none d-sm-block">A protein localization prediction tool at sub-cellular and sub-organellar levels</p>
             <p class="d-none d-lg-block"></p>
         </div>
     </div>
@@ -73,13 +73,13 @@
                             <textarea class="form-control" id="sequenceInput" name="sequenceInput" rows="6"
                                 aria-describedby="sequenceHelp" required></textarea>
                             <small id="sequenceHelp" class="form-text text-muted">The sequence(s) must in FASTA format
-                                (maximum 25 sequences).
+                                (maximum 500 sequences).
                             </small>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-12 col-lg-6">
-                            <label for="nickName1">NickName</label>
+                            <label for="nickName1">Job Nickname</label>
                             <input class="form-control" id="nickName1" name="nickName1"
                                 aria-describedby="nickNameHelp1">
                             <small id="nickNameHelp1" class="form-text text-muted">Optional</small>
@@ -90,10 +90,7 @@
                             <label for="emailInput1"> Email address</label>
                             <input type="email" class="form-control" id="emailInput1" name="emailInput1"
                                 aria-describedby="emailHelp1" placeholder="Enter email">
-                            <small id="emailHelp1" class="form-text text-muted">Optional (We'll never share your email
-                                with
-                                anyone
-                                else)</small>
+                            <small id="emailHelp1" class="form-text text-muted">Optional. We will notify you through email when the job is done. (We'll never share your email with anyone else.)</small>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary submitBtn">Submit</button>
@@ -113,14 +110,14 @@
                                 <label id="fileLabel" class="custom-file-label text-truncate" for="fileSelect">Choose
                                     file</label>
                                 <small id="fileHelp" class="form-text text-muted">The file uploaded should contains only
-                                    protein sequence(s) in FASTA format (maximum 25 sequences).</small>
+                                    protein sequence(s) in FASTA format (maximum 500 sequences).</small>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-12 col-lg-6">
-                            <label for="nickName2">NickName</label>
+                            <label for="nickName2">Job NickName</label>
                             <input class="form-control" id="nickName2" name="nickName2"
                                 aria-describedby="nickNameHelp2">
                             <small id="nickNameHelp2" class="form-text text-muted">Optional</small>
@@ -131,10 +128,7 @@
                             <label for="emailInput2">Email address</label>
                             <input type="email" class="form-control" id="emailInput2" name="emailInput2"
                                 aria-describedby="emailHelp2" placeholder="Enter email">
-                            <small id="emailHelp2" class="form-text text-muted">Optional (We'll never share your email
-                                with
-                                anyone
-                                else)</small>
+                            <small id="emailHelp2" class="form-text text-muted">Optional. We will notify you through email when the job is done. (We'll never share your email with anyone else.)</small>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary submitBtn">Submit</button>
@@ -145,9 +139,9 @@
     </div>
 
     <div class="container pt-3">
-        <h6 class=""> Reference</h6>
+        <h6 class=""> Citation:</h6>
         <p>
-            MULocDeep: Protein locator using deep learning.
+            MULocDeep: An Interpretable Deep Learning Model for Protein Localization Prediction at the Sub-organelle Resolution (in submission)
         </p>
     </div>
 
