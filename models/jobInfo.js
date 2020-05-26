@@ -7,7 +7,9 @@ var jobInfoSchema = new mongoose.Schema({
 	email: String,
 	status: String,
 	submittedTime: String,
-	ipAddress: String
+	ipAddress: String,
+	size: Number,
+	proteins: Number
 });
 
 module.exports = mongoose.model("jobInfo", jobInfoSchema);

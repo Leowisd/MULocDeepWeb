@@ -5,7 +5,8 @@ var userInfoSchema = new mongoose.Schema({
 	capacity: Number,
 	lat: Number,
 	lon: Number,
-	query: Number
+	query: Number,
+	proteins: Number
 });
 
 module.exports = mongoose.model("userInfo", userInfoSchema);

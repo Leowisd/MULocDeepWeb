@@ -168,13 +168,13 @@ schedule.scheduleJob(rule, function () {
 
 // clean data per day
 // schedule.scheduleJob('0 * * * * *', function () {
-schedule.scheduleJob('0 0 0 * * *', function () {
+schedule.scheduleJob('0 0 0 */3 * *', function () {
 	console.log("Schedule jobs cleaning begins...");
 	var curTime = moment().utcOffset("-06:00").format('YYYY-MM-DD HH:mm:ss');
 	var curDay = parseInt(curTime.substring(8, 10));
 	var curMonth = parseInt(curTime.substring(5, 7));
 	var curYear = parseInt(curTime.substring(0, 4));
-	curDay -= 8; //loose to 8 days
+	curDay -= 4; //loose to 4 days
 	if (curDay <= 0) {
 		curDay = 30 + curDay;
 		curMonth--;
@@ -228,7 +228,7 @@ function deleteFolder(path) {
 function asyncLoop(i, docs, callback){
 	if (i < docs.length){
 		let dUser = docs[i].ipAddress;
-		let fileSize = fs.statSync('data/upload/' + docs[i].file).size * 220;
+		let fileSize = docs[i].size;
 		let dFile = docs[i].file;
 		let dID = docs[i].id;
 		userInfo.findOne({ 'ipAddress': dUser }, function (err, user) {

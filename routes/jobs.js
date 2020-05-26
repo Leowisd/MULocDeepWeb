@@ -219,36 +219,28 @@ router.post("/jobs/delete/:id", function (req, res) {
 	var job = req.params.id.substr(1);
 	// console.log(job);
 
-	// update user capacity
-	// var fileSize = 0;
-	fs.stat('data/upload/' + job + '.fa', function (err, stats) {
-		if (err)
-			return console.error(err);
-		var fileSize = stats.size * 220;
-
-		userInfo.findOne({ 'ipAddress': get_client_ip(req) }, function (err, doc) {
-			if (err)
-				console.error(err);
-			if (doc != undefined) {
-				// var update = { $set: { capacity: 0 } };
-				var update = { $set: { capacity: doc.capacity - fileSize } };
-				userInfo.updateOne({ 'ipAddress': get_client_ip(req) }, update, function (err, u) {
-					if (err)
-						console.log(err);
-					else {
-						console.log("User info was updated!");
-						console.log("User Size: " + (doc.capacity - fileSize));
-					}
-				});
-			}
-		});
-	});
-
 	// delete jobs
 	jobInfo.findOne({ _id: job }, function (err, doc) {
 		if (err)
 			return console.error(err);
 		if (doc != undefined) {
+			let fileSize = doc.size;
+			userInfo.findOne({ 'ipAddress': get_client_ip(req) }, function (err, doc) {
+				if (err)
+					console.error(err);
+				if (doc != undefined) {
+					var update = { $set: { capacity: doc.capacity - fileSize } };
+					userInfo.updateOne({ 'ipAddress': get_client_ip(req) }, update, function (err, u) {
+						if (err)
+							console.log(err);
+						else {
+							console.log("User info was updated!");
+							console.log("User Size: " + (doc.capacity - fileSize));
+						}
+					});
+				}
+			});
+
 			var dFile = doc.file;
 			deleteFolder('data/results/' + doc.id);
 			fs.unlink('data/upload/' + dFile, function (err) {

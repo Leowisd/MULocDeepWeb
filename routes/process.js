@@ -52,5 +52,19 @@ router.get("/process/statistic/querys", function (req, res) {
     })
 })
 
+router.get("/process/statistic/proteins", function (req, res) {
+    userInfo.find({}, function (err, docs) {
+        if (err) console.log(err);
+        let count = 0;
+        for (var i = 0; i < docs.length; i++){
+            count += docs[i].proteins;
+        }
+        var data = {
+            proteins: count
+        }
+        res.send(data);
+    })
+})
+
 module.exports = router;
 

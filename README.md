@@ -55,10 +55,11 @@ Visit heep://localhost:8082/
 20. ~~change the MAP page UI~~
 ### Version 1.3
 21. ~~update predict script to avoid invalid seq name.~~
+### Version 1.3.1
+22. update space function, delete temp files.
 ### Version 1.4
-22. update time estimating function
-23. add fix space error functuion
-24. check can we add more paramaters to database schema
+23. update time estimating function
+24. add fix space error functuion
 
 ## Problem
 1. ~~predict.py, predicting query like >Medtr2g018290.1;AT4G32520.2 wrong.~~(temp solution: replace ; with :)

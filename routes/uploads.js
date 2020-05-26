@@ -15,7 +15,7 @@ var userInfo = require("../models/userInfo");
 var transporter = require("../models/emailConfig");
 
 // max capacity for each user
-var maxCapacity = 50 * 1024 * 1024; //50 MB
+var maxCapacity = 100 * 1024 * 1024; //100 MB
 
 
 // JOBINFO: show the current job info
@@ -69,7 +69,9 @@ router.post("/upload/sequence", function (req, res) {
 		status: "queued",
 		// submittedTime: sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss'),
 		submittedTime: moment().utcOffset("-06:00").format('YYYY-MM-DD HH:mm:ss'),
-		ipAddress: get_client_ip(req)
+		ipAddress: get_client_ip(req),
+		size: 0,
+		proteins: 0
 	});
 	job.file = job.id + '.fa';
 
@@ -81,10 +83,11 @@ router.post("/upload/sequence", function (req, res) {
 	console.log("======================================");
 
 	// var fileSize = 0;
-	fs.stat('data/upload/' + job.file, function (err, stats) {
-		if (err)
-			return console.error(err);
-		var fileSize = stats.size * 220;
+	var fileSize = fs.statSync('data/upload/' + job.file).size * 30;
+	// fs.stat('data/upload/' + job.file, function (err, stats) {
+	// 	if (err)
+	// 		return console.error(err);
+	// 	var fileSize = stats.size * 30;
 
 		var isEnough = 1;
 		userInfo.findOne({ 'ipAddress': get_client_ip(req) }, function (err, doc) {
@@ -94,7 +97,8 @@ router.post("/upload/sequence", function (req, res) {
 				var user = new userInfo({
 					ipAddress: get_client_ip(req),
 					capacity: fileSize,
-					query: 0
+					query: 0,
+					proteins: 0
 				});
 
 				if (user.capacity > maxCapacity) {
@@ -148,11 +152,14 @@ router.post("/upload/sequence", function (req, res) {
 
 				taskList.push(job.id);
 
+				job.proteins = getNumofProteins(sequence);
+				job.size = fileSize;
 				job.save(function (err, job) {
 					if (err) {
 						console.log("SOMETHING WENT WRONG!");
 					}
 					else {
+						console.log("job size is :" + job.size);
 						console.log("Job was saved!");
 						console.log("======================================");
 					}
@@ -160,13 +167,14 @@ router.post("/upload/sequence", function (req, res) {
 
 				// Update the number of querys of current user
 				userInfo.findOne({ 'ipAddress': get_client_ip(req) }, function (err, doc) {
-					let update = { $set: { query: doc.query + 1 } };
+					let update = { $set: { query: doc.query + 1, proteins: doc.proteins + getNumofProteins(sequence) } };
 					userInfo.updateOne({ 'ipAddress': get_client_ip(req) }, update, function (err, u) {
 						if (err)
 							console.log(err);
 						else {
 							console.log("User info was updated!");
 							console.log("User query: " + (doc.query + 1));
+							console.log("User Proteins: " + (doc.proteins + getNumofProteins(sequence)));
 							console.log("======================================");
 						}
 					});
@@ -197,7 +205,7 @@ router.post("/upload/sequence", function (req, res) {
 				res.render("OUTSPACE");
 			}
 		});
-	});
+	// });
 });
 
 //Deal with file post
@@ -214,7 +222,9 @@ router.post("/upload/file", function (req, res) {
 		status: "queued",
 		// submittedTime: sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss'),
 		submittedTime: moment().utcOffset("-06:00").format('YYYY-MM-DD HH:mm:ss'),
-		ipAddress: get_client_ip(req)
+		ipAddress: get_client_ip(req),
+		size: 0,
+		proteins: 0
 	});
 	job.file = job.id + '.fa';
 
@@ -228,11 +238,11 @@ router.post("/upload/file", function (req, res) {
 			console.error(err);
 	}); //delete the original file
 
-	// var fileSize = 0;
-	fs.stat('data/upload/' + job.file, function (err, stats) {
-		if (err)
-			return console.error(err);
-		var fileSize = stats.size * 220;
+	var fileSize = fs.statSync('data/upload/' + job.file).size * 30;
+	// fs.stat('data/upload/' + job.file, function (err, stats) {
+	// 	if (err)
+	// 		return console.error(err);
+	// 	var fileSize = stats.size * 220;
 
 		var isEnough = 1;
 		userInfo.findOne({ 'ipAddress': get_client_ip(req) }, function (err, doc) {
@@ -242,7 +252,8 @@ router.post("/upload/file", function (req, res) {
 				var user = new userInfo({
 					ipAddress: get_client_ip(req),
 					capacity: fileSize,
-					query: 0
+					query: 0,
+					proteins: 0
 				});
 				if (user.capacity > maxCapacity) {
 					user.capacity = 0;
@@ -295,25 +306,29 @@ router.post("/upload/file", function (req, res) {
 
 				taskList.push(job.id);
 
+				job.proteins = getNumofProteins(data.toString());
+				job.size = fileSize;
 				job.save(function (err, job) {
 					if (err) {
 						console.log("SOMETHING WENT WRONG!");
 					}
 					else {
 						console.log("Job was saved!");
+						console.log("job size is :" + job.size);
 						console.log("======================================");
 					}
 				});
 
 				// Update the number of querys of current user
 				userInfo.findOne({ 'ipAddress': get_client_ip(req) }, function (err, doc) {
-					let update = { $set: { query: doc.query + 1 } };
+					let update = { $set: { query: doc.query + 1, proteins: doc.proteins + getNumofProteins(data.toString()) } };
 					userInfo.updateOne({ 'ipAddress': get_client_ip(req) }, update, function (err, u) {
 						if (err)
 							console.log(err);
 						else {
 							console.log("User info was updated!");
 							console.log("User query: " + (doc.query + 1));
+							console.log("User proteins: " + (doc.proteins + getNumofProteins(data.toString())));
 							console.log("======================================");
 						}
 					});
@@ -343,7 +358,7 @@ router.post("/upload/file", function (req, res) {
 				res.render("OUTSPACE");
 			}
 		});
-	});
+	// });
 });
 
 function get_client_ip(req) {
@@ -370,6 +385,10 @@ function format(seq){
 	}
 	// console.log(res);
 	return res.trim();
+}
+
+function getNumofProteins(seq){
+	return seq.trim().split('>').length - 1;
 }
 
 module.exports = router;
