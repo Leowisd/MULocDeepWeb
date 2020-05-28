@@ -14,6 +14,7 @@ var transporter = require("../models/emailConfig");
 
 // Set Process Count and Wailting List
 taskList = [];
+curJobID = null;
 var curProcess = 0;
 
 // INDEX: show the landing page
@@ -44,6 +45,7 @@ schedule.scheduleJob(rule, function () {
 		console.log("Should run task");
 
 		var curJob = taskList.shift();
+		curJobID = curJob;
 
 		jobInfo.findById(curJob, function (err, job) {
 			if (err)
@@ -81,6 +83,7 @@ schedule.scheduleJob(rule, function () {
 					}
 
 					curProcess = 0;
+					curJobID = null;
 					var updates = { $set: { status: 'Done' } };
 					jobInfo.updateOne({ _id: job.id }, updates, function (err, job) {
 						if (err) {
@@ -143,6 +146,16 @@ schedule.scheduleJob(rule, function () {
 
 					// good practice to catch this error explicitly
 					archive.on('error', function (err) {
+						var update = { $set: { status: 'error' } };
+						jobInfo.updateOne({ _id: job.id }, update, function (err, job) {
+							if (err) {
+								console.log(err);
+							}
+							else {
+								console.log("SOMETHING WENT WRONG WHEN PREDICTING!");
+								// console.log(job);
+							}
+						});
 						throw err;
 					});
 
@@ -190,7 +203,7 @@ schedule.scheduleJob('0 0 0 */3 * *', function () {
 		if (err)
 			return console.error(err);
 		if (docs != undefined) {
-			asyncLoop(0, docs, function(){
+			asyncLoopScheduleClean(0, docs, function(){
 				jobInfo.deleteMany({ 'submittedTime': { $lte: due } }, function (err) {
 					if (err)
 						return console.error(err);
@@ -225,7 +238,7 @@ function deleteFolder(path) {
 	}
 }
 
-function asyncLoop(i, docs, callback){
+function asyncLoopScheduleClean(i, docs, callback){
 	if (i < docs.length){
 		let dUser = docs[i].ipAddress;
 		let fileSize = docs[i].size;
@@ -244,7 +257,7 @@ function asyncLoop(i, docs, callback){
 				fs.unlink('data/upload/' + dFile, function (err) {
 					if (err) console.error(err);
 				});
-				asyncLoop(i + 1, docs, callback);
+				asyncLoopScheduleClean(i + 1, docs, callback);
 			});	
 		});
 	}

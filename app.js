@@ -1,7 +1,7 @@
-var express 	= require("express"),
-	app 		= express(),
-	bodyParser 	= require("body-parser"),
-	mongoose 	= require("mongoose");
+var express = require("express"),
+	app = express(),
+	bodyParser = require("body-parser"),
+	mongoose = require("mongoose");
 
 var uploadsRoutes = require("./routes/uploads"),
 	jobsRoutes = require("./routes/jobs"),
@@ -33,37 +33,41 @@ app.get("*", function (req, res) {
 });
 
 app.listen(8082, process.env.IP, function () {
-	console.log("The MULocDeep Server Has Started At: http://localhost:8082/");
-	userInfo.find({}, function(err, docs){
-		for (let i = 0; i < docs.length; i++){
-			if (docs[i].proteins == undefined){
-				let id = docs[i].id;
-				let updates = {$set: {proteins: 0, capacity: 0}};
-				userInfo.updateOne({_id: id}, updates, function(err, m){
-				})
-			}
-			else{
-				let id = docs[i].id;
-				let updates = {$set: {capacity: 0}};
-				userInfo.updateOne({_id: id}, updates, function(err, m){
-				})
-			}
+	console.log("The MULocDeep Server Has Started At: http://localhost:8082/ ...");
+	// let update = {$set: {capacity:0}}
+	// userInfo.updateMany({}, update, function(){
+
+	// });
+	jobInfo.find({}, function (err, docs) {
+		if (docs != undefined) {
+			asyncloopStartServer(0, docs, function () {
+				console.log("Server has deleted all invalid jobs...");
+			})
 		}
-	})
-	jobInfo.find({}, function(err, docs){
-		for (let i = 0; i < docs.length; i++){
-			deleteFolder('data/results/' + docs[i].id);
-			fs.unlink('data/upload/' + docs[i].file, function (err) {
-				if (err) console.error(err);
-			});			
-		}
-		jobInfo.deleteMany({}, function (err) {
-			if (err)
-				return console.error(err);
-			return console.log("Clean Old Tasks Historys and Files");
-		});
 	})
 })
+
+function asyncloopStartServer(i, docs, callback) {
+	if (i < docs.length) {
+		let job = docs[i];
+		if (job.status != 'Done') {
+			deleteFolder('data/results/' + job.id);
+			fs.unlink('data/upload/' + job.file, function (err) {
+				if (err) console.error(err);
+			});
+			userInfo.findOne({ ipAddress: job.ipAddress }, function (err, doc) {
+				let update = { $set: { capacity: doc.capacity - job.size } };
+				userInfo.updateOne({ _id: doc.id }, update, function () {
+					jobInfo.deleteOne({ _id: job.id }, function () {
+						asyncloopStartServer(i + 1, docs, callback);
+					})
+				})
+			});
+		}
+		else asyncloopStartServer(i + 1, docs, callback);
+	}
+	else callback();
+}
 
 function deleteFolder(path) {
 	let files = [];
@@ -80,7 +84,7 @@ function deleteFolder(path) {
 			}
 		});
 		files = fs.readdirSync(path);
-		while(files.length != 0){
+		while (files.length != 0) {
 			files = fs.readdirSync(path);
 		}
 		fs.rmdir(path, function (err) {

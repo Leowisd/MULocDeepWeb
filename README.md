@@ -56,11 +56,12 @@ Visit heep://localhost:8082/
 ### Version 1.3
 21. ~~update predict script to avoid invalid seq name.~~
 ### Version 1.3.1
-22. update space function, delete temp files.
+22. ~~update space function, delete temp files.~~
 ### Version 1.4
-23. update time estimating function
-24. add fix space error functuion
+23. ~~update time estimating function to real~~
+24. ~~add server restart clean function~~
+25. add number of proteins display
 
 ## Problem
-1. ~~predict.py, predicting query like >Medtr2g018290.1;AT4G32520.2 wrong.~~(temp solution: replace ; with :)
+1. ~~predict.py, predicting query like >Medtr2g018290.1;AT4G32520.2 wrong(temp solution: replace ; with :)~~
 2. ~~two types results catelogs different?~~
