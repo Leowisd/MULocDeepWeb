@@ -6,23 +6,23 @@
 
   <nav class="navbar navbar-expand-md navbar-dark bg-primary">
     <div class="container col-12 col-lg-8">
-      <a class="navbar-brand" href="/" data-step="1" data-intro="Enter the index page.">MULocDeep</a>
+      <a class="navbar-brand" href="/">MULocDeep</a>
       <button class="navbar-toggler ml-3" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item" data-step="3" data-intro="Search your job here.">
+          <li class="nav-item" >
             <a class="nav-link" href="/jobs"><i class="fas fa-search"></i> Search</a>
           </li>
-          <li class="nav-item" data-step="4" data-intro="Check your own jobs here.">
+          <li class="nav-item">
             <a class="nav-link" href="/jobs/all"><i class="fas fa-list"></i> Status </a>
           </li>
-          <li class="nav-item" data-step="5" data-intro="Check an example result here.">
+          <li class="nav-item">
             <a class="nav-link" href="/jobs/example"><i class="fas fa-envelope-open-text"></i> Example </a>
           </li>
-          <li class="nav-item" data-step="6" data-intro="Contact us here.">
+          <li class="nav-item">
             <a class="nav-link" href="/contact"><i class="fas fa-phone-square-alt"></i> Contact </a>
           </li>
           <li class="nav-item active">
@@ -38,9 +38,9 @@
     </div>
   </nav>
 
-  <div id="map" data-step="9" data-intro="Our users around the world!"></div>
+  <div id="map" data-step="1" data-intro="Our users around the world!"></div>
 
-  <div class="container border shadow-lg col-0 col-lg-4" id="welcomeCard">
+  <div class="container border shadow-lg col-0 col-lg-4" id="welcomeCard" data-step="2" data-intro="The statistic data of our website.">
     <div class="row">
       <div class="col-lg-12">
         <div class="content text-center">
@@ -49,10 +49,12 @@
             A protein localization prediction tool at sub-cellular and sub-organellar levels
           </p>
           <hr>
-          <h6 id="userNumHead" style="display: none;"> The number of users</h6>
+          <h6 id="userNumHead" style="display: none;"> The number of total users</h6>
           <div id="userNumber" style="display: none;"></div>
-          <h6 id="queryNumHead" style="display: none;"> The number of queries</h6>
+          <h6 id="queryNumHead" style="display: none;"> The number of total queries</h6>
           <div id="queryNumber" style="display: none;"></div>
+          <h6 id="proteinsNumHead" style="display: none;"> The number of total proteins</h6>
+          <div id="proteinsNumber" style="display: none;"></div>
         </div>
       </div>
     </div>

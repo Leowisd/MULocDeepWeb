@@ -97,13 +97,17 @@ schedule.scheduleJob(rule, function () {
 					});
 
 					// send success email 
+					let link = "<center><a href = \"http://mu-loc.org/jobs/:" + job.id + "\">";
 					if (job.email !== "") {
 						var mail = {
 							from: 'MULocDeep<mulocdeep@gmail.com>',
 							subject: 'MULocDeep: Job Infomation',
 							to: job.email,
 							text: 'Your job: ' + job.id + ' has completed!',
-							html: '<h3>MULocDeep</h3><br><p> Your job :' + job.id + "has completed!</p>"
+							html: '<center><h2>MULocDeep</h2></center><br><center><p> Your job :</p></center><br>' +
+								link +
+								job.id + '</a></center><br>' +
+								"<center><p>has completed!</p></center>"
 						};
 						transporter.sendMail(mail, function (error, info) {
 							if (error) return console.log(error);
@@ -179,7 +183,7 @@ schedule.scheduleJob(rule, function () {
 	}
 });
 
-// clean data per day
+// clean data per three days
 // schedule.scheduleJob('0 * * * * *', function () {
 schedule.scheduleJob('0 0 0 */3 * *', function () {
 	console.log("Schedule jobs cleaning begins...");
@@ -196,18 +200,45 @@ schedule.scheduleJob('0 0 0 */3 * *', function () {
 			curYear--;
 		}
 	}
-	var due = curYear + "-" + curMonth + "-" + curDay + " 00:00:00";
+
+	var curDayStr = '';
+	if (curDay < 10) {
+		curDayStr = '0' + curDay;
+	}
+	else curDayStr = curDay;
+	var curMonthStr = '';
+	if (curMonth < 10){
+		curMonthStr = '0' + curMonth;
+	}
+	else curMonthStr = curMonth;
+
+	var due = curYear + "-" + curMonthStr + "-" + curDayStr + " 00:00:00";
 	// var due = '2020' + "-" + curMonth + "-" + curDay + " 00:00:00";
 
 	jobInfo.find({ 'submittedTime': { $lte: due } }, function (err, docs) {
 		if (err)
 			return console.error(err);
 		if (docs != undefined) {
-			asyncLoopScheduleClean(0, docs, function(){
+			asyncLoopScheduleClean(0, docs, function () {
 				jobInfo.deleteMany({ 'submittedTime': { $lte: due } }, function (err) {
 					if (err)
 						return console.error(err);
-					return console.log("Clean Old Tasks Historys and Files at:" + curTime);
+					console.log("Clean Old Tasks Historys and Files at:" + curTime);
+
+					// Adjust space if user space equals to 0
+					userInfo.find({}, function (err, docs) {
+						for (let i = 0; i < docs.length; i++) {
+							let ip = docs[i].ipAddress;
+							jobInfo.find({ 'ipAddress': ip }, function (err, docs) {
+								if (docs == undefined || docs.length == 0) {
+									let update = { $set: { capacity: 0 } };
+									userInfo.updateOne({ 'ipAddress': ip }, update, function (err, d) {
+									});
+								}
+							})
+						}
+						console.log("Space Adjust Completed...");
+					})
 				});
 			});
 		}
@@ -229,7 +260,7 @@ function deleteFolder(path) {
 			}
 		});
 		files = fs.readdirSync(path);
-		while(files.length != 0){
+		while (files.length != 0) {
 			files = fs.readdirSync(path);
 		}
 		fs.rmdir(path, function (err) {
@@ -238,8 +269,8 @@ function deleteFolder(path) {
 	}
 }
 
-function asyncLoopScheduleClean(i, docs, callback){
-	if (i < docs.length){
+function asyncLoopScheduleClean(i, docs, callback) {
+	if (i < docs.length) {
 		let dUser = docs[i].ipAddress;
 		let fileSize = docs[i].size;
 		let dFile = docs[i].file;
@@ -258,7 +289,7 @@ function asyncLoopScheduleClean(i, docs, callback){
 					if (err) console.error(err);
 				});
 				asyncLoopScheduleClean(i + 1, docs, callback);
-			});	
+			});
 		});
 	}
 	else {

@@ -520,15 +520,15 @@ function startIntro() {
             },
             {
                 element: document.querySelector('#cellular_heading_0'),
-                intro: "Click to show/hide the details of sub-cellular prediction results",
+                intro: "Click to show/hide the chart of sub-cellular prediction results. You can drag to zoom and click menu button to print/save the chart.",
             },
             {
                 element: document.querySelector('#organellar_heading_0'),
-                intro: 'Click to show/hide the details of sub-organellar prediction results'
+                intro: 'Click to show/hide the chart of sub-organellar prediction results. You can drag to zoom and click menu button to print/save the chart.'
             },
             {
                 element: document.querySelector('#weights_heading_0'),
-                intro: 'Click to show/hide the the chart of attention weights. You can drag to zoom and click menu button to print/save the chart.'
+                intro: 'Click to show/hide the chart of attention weights. You can drag to zoom and click menu button to print/save the chart.'
             },
             {
                 intro: "Click the right bottom button(if appear) to scroll to the top of this page.",

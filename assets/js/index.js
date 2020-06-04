@@ -47,3 +47,9 @@ var map = new Datamap({
     $("#queryNumber").numberAnimate({num: data.querys, speed:4000, symbol:","});
   });
 
+  $("#proteinsNumHead").fadeIn(3000);
+  $("#proteinsNumber").fadeIn(3000);
+  var statisticQueryURL = '/process/statistic/proteins';
+  $.get(statisticQueryURL, function (data, status) {
+    $("#proteinsNumber").numberAnimate({num: data.proteins, speed:4000, symbol:","});
+  });

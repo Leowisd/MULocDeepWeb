@@ -41,7 +41,7 @@ Visit heep://localhost:8082/
 7. ~~fix the the number of total query bug~~
 8. ~~Add CONTACT page~~
 9. ~~Add some introduction~~
-10.  search ID ? IP
+10.  ~~search ID ? IP~~
 ### version 1.1
 11. ~~add email input on job waiting page, update database~~
 12. ~~add estimated time on job waiting page, add time function~~
@@ -60,7 +60,8 @@ Visit heep://localhost:8082/
 ### Version 1.4
 23. ~~update time estimating function to real~~
 24. ~~add server restart clean function~~
-25. add number of proteins display
+25. ~~add number of proteins display~~
+26. ~~add space adjust function~~
 
 ## Problem
 1. ~~predict.py, predicting query like >Medtr2g018290.1;AT4G32520.2 wrong(temp solution: replace ; with :)~~

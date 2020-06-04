@@ -5,7 +5,7 @@
     <nav class="navbar navbar-expand-md navbar-dark bg-primary">
         <div class="container col-12 col-lg-8">
 
-            <a class="navbar-brand" href="/">MULocDeep</a>
+            <a class="navbar-brand" href="/" data-step="1" data-intro="Uploading page">MULocDeep</a>
             <button class="navbar-toggler ml-3" type="button" data-toggle="collapse"
                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -15,22 +15,22 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/jobs"><i class="fas fa-search"></i> Search</a>
+                        <a class="nav-link" href="/jobs" data-step="2" data-intro="Job searching page"><i class="fas fa-search"></i> Search</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/jobs/all"><i class="fas fa-list"></i> Status </a>
+                        <a class="nav-link" href="/jobs/all" data-step="3" data-intro="Status of all jobs you submitted"><i class="fas fa-list"></i> Status </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/jobs/example"><i class="fas fa-envelope-open-text"></i> Example </a>
+                        <a class="nav-link" href="/jobs/example" data-step="4" data-intro="Check an result example"><i class="fas fa-envelope-open-text"></i> Example </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/contact"><i class="fas fa-phone-square-alt"></i> Contact </a>
+                        <a class="nav-link" href="/contact" data-step="5" data-intro="Contact page"><i class="fas fa-phone-square-alt"></i> Contact </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/map"><i class="fas fa-globe-americas"></i> Map </a>
+                        <a class="nav-link" href="/map" data-step="6" data-intro="Users map and statistics data"><i class="fas fa-globe-americas"></i> Map </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/tools"><i class="fas fa-toolbox"></i> Other Tools </a>
+                        <a class="nav-link" href="/tools" data-step="7" data-intro="Other userful online tools"><i class="fas fa-toolbox"></i> Other Tools </a>
                     </li>
                 </ul>
             </div>
@@ -54,11 +54,11 @@
 
     <div class="container border rounded shadow-lg">
         <ul class="nav nav-pills mb-3 pt-3" id="pills-tab" role="tablist">
-            <li class="nav-item" data-step="1" data-intro="Paste your sequences here to predict.">
+            <li class="nav-item" data-step="8" data-intro="Paste your sequences here to predict.">
                 <a class="nav-link active" id="pills-Sequence-tab" data-toggle="pill" href="#pills-Sequence" role="tab"
                     aria-controls="pills-Sequence" aria-selected="true">Sequence</a>
             </li>
-            <li class="nav-item" data-step="2" data-intro="Upload your sequences file to predict">
+            <li class="nav-item" data-step="9" data-intro="Upload your sequences file to predict">
                 <a class="nav-link" id="pills-File-tab" data-toggle="pill" href="#pills-File" role="tab"
                     aria-controls="pills-File" aria-selected="false">File</a>
             </li>
@@ -73,7 +73,7 @@
                             <textarea class="form-control" id="sequenceInput" name="sequenceInput" rows="6"
                                 aria-describedby="sequenceHelp" required></textarea>
                             <small id="sequenceHelp" class="form-text text-muted">The sequence(s) must in FASTA format
-                                (maximum 500 sequences).
+                                (maximum 200 sequences).
                             </small>
                         </div>
                     </div>
@@ -110,7 +110,7 @@
                                 <label id="fileLabel" class="custom-file-label text-truncate" for="fileSelect">Choose
                                     file</label>
                                 <small id="fileHelp" class="form-text text-muted">The file uploaded should contains only
-                                    protein sequence(s) in FASTA format (maximum 500 sequences).</small>
+                                    protein sequence(s) in FASTA format (maximum 200 sequences).</small>
                             </div>
                         </div>
                     </div>

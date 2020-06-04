@@ -59,8 +59,8 @@ function checkSeqValid() {
 
         num = num + 1;
     }
-    if (num > 500){
-        $('#errorModalBody').text("The number of sequences " + num + " is out of the limit: 500.");
+    if (num > 200){
+        $('#errorModalBody').text("The number of sequences " + num + " is out of the limit: 200.");
         $('#errorModal').modal('show');
         return false;
     }
@@ -78,7 +78,7 @@ function checkFileValid() {
     reader.readAsText(files[0], "UTF-8");//读取文件
     reader.onload = function (evt) { //读取完文件之后会回来这里
 
-        let seq = evt.target.result.trim().split(/\r?\n/); // 读取文件内容
+        let seq = evt.target.result.trim(); // 读取文件内容
         if (!seq){
             $('#errorModalBody').text("Query cannot be empty.");
             $('#errorModal').modal('show');
@@ -92,7 +92,7 @@ function checkFileValid() {
             if (i == 0 && fasta){
                 $('#errorModalBody').text("The description of query must begin with >.");
                 $('#errorModal').modal('show');
-                return false;
+                $('#reset').click();
             }
             if (!fasta) continue;
 
@@ -106,7 +106,7 @@ function checkFileValid() {
             if (!fasta) { // is it empty whatever we collected ? re-check not efficient 
                 $('#errorModalBody').text("Query must contain amino acid code sequence.");
                 $('#errorModal').modal('show');
-                return false;
+                $('#reset').click();
             }
 
             // note that the empty string is caught above
@@ -114,16 +114,15 @@ function checkFileValid() {
             if(/^[ACDEFGHIKLMNPQRSTUVWY]+$/i.test(fasta) == false){
                 $('#errorModalBody').text("Sequences must be in valid amino acid code(A, C, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, U, V, W, Y) without any space.");
                 $('#errorModal').modal('show');
-                return false;
+                $('#reset').click();
             }
 
             num = num + 1;
         }
-        if (num > 500){
-            $('#errorModalBody').text("The number of sequences " + num + " is out of the limit: 500.");
+        if (num > 200){
+            $('#errorModalBody').text("The number of sequences " + num + " is out of the limit: 200.");
             $('#errorModal').modal('show');
-            return false;
+            $('#reset').click();
         }
-        return true;
     }
 }

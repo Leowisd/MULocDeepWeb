@@ -25,73 +25,77 @@ router.get("/upload/:id", function (req, res) {
 
 	var flag = 0;
 	var number = taskList.length;
-	jobInfo.find({ _id: jobId }, function (err, docs) {
+
+	jobInfo.findOne({ _id: jobId }, function (err, doc) {
 		if (err) {
 			console.error(err);
 		}
-		if (docs.length > 0)
-			if (docs[0].status === 'Done') {
+		if (doc == undefined || doc == null)
+			res.render("404");
+		else{
+			if (doc.status === 'Done') {
 				flag = 1;
 			}
-			else if (docs[0].status === 'Processing') {
+			else if (doc.status === 'Processing') {
 				flag = -1;
 			}
-
-		// =================================
-		// Calculating estimated waiting time 
-		// the estimated function is: totalSecs = 0.5 * totalSeqs + 27
-		// =================================
-		let numberOfSeq = 0;
-		let timecal = "";
-
-		// When the task is in the waiting queue
-		if (flag == 0) {
-			// only one task in the queue and no job is processing.
-			if (taskList.length == 1 && curJobID == null) {
-				jobInfo.findOne({ _id: taskList[0] }, function (err, doc) {
-					numberOfSeq = doc.proteins;
-					totalSec = numberOfSeq * 0.5 + 27;
-					timecal = Math.floor(totalSec / 60) + 'mins ' + (totalSec % 60) + 's';
-					res.render("JOBINFO", { jobId: jobId, flag: flag, number: number, time: timecal });
-
-				})
-			}
-			// only one task in the queue and a job is processing.
-			else if (taskList.length == 1 && curJobID != null) {
-				jobInfo.findOne({ _id: curJobID }, function (err, doc0) {
-					numberOfSeq = doc0.proteins;
-					jobInfo.findOne({ _id: taskList[0] }, function (err, doc1) {
-						numberOfSeq = numberOfSeq + doc1.proteins;
+	
+			// =================================
+			// Calculating estimated waiting time 
+			// the estimated function is: totalSecs = 0.5 * totalSeqs + 27
+			// =================================
+			let numberOfSeq = 0;
+			let timecal = "";
+	
+			// When the task is in the waiting queue
+			if (flag == 0) {
+				// only one task in the queue and no job is processing.
+				if (taskList.length == 1 && curJobID == null) {
+					jobInfo.findOne({ _id: taskList[0] }, function (err, doc) {
+						numberOfSeq = doc.proteins;
 						totalSec = numberOfSeq * 0.5 + 27;
-						timecal = Math.floor(totalSec / 60) + 'mins ' + (totalSec % 60) + 's';
+						timecal = Math.floor(totalSec / 60) + 'mins ' + Math.floor(totalSec % 60) + 's';
 						res.render("JOBINFO", { jobId: jobId, flag: flag, number: number, time: timecal });
-					});
-				})
+	
+					})
+				}
+				// only one task in the queue and a job is processing.
+				else if (taskList.length == 1 && curJobID != null) {
+					jobInfo.findOne({ _id: curJobID }, function (err, doc0) {
+						numberOfSeq = doc0.proteins;
+						jobInfo.findOne({ _id: taskList[0] }, function (err, doc1) {
+							numberOfSeq = numberOfSeq + doc1.proteins;
+							totalSec = numberOfSeq * 0.5 + 27;
+							timecal = Math.floor(totalSec / 60) + 'mins ' + Math.floor(totalSec % 60) + 's';
+							res.render("JOBINFO", { jobId: jobId, flag: flag, number: number, time: timecal });
+						});
+					})
+				}
+				// More than one tasks in the queue
+				else if (taskList.length > 1 && curJobID != null) {
+					jobInfo.findOne({ _id: curJobID }, function (err, doc) {
+						numberOfSeq = doc.proteins;
+						asyncloopCalculateTime(0, 0, function (temp) {
+							numberOfSeq = numberOfSeq + temp;
+							totalSec = numberOfSeq * 0.5 + 27
+							timecal = Math.floor(totalSec / 60) + 'mins ' + Math.floor(totalSec % 60) + 's';
+							res.render("JOBINFO", { jobId: jobId, flag: flag, number: number, time: timecal });
+						});
+					})
+				}
+				else res.render("JOBINFO", { jobId: jobId, flag: flag, number: number, time: "...loading..." });// in case 
 			}
-			// More than one tasks in the queue
-			else if (taskList.length > 1 && curJobID != null) {
+			// When is task is processing
+			else if (flag == -1 && curJobID != null) {
 				jobInfo.findOne({ _id: curJobID }, function (err, doc) {
 					numberOfSeq = doc.proteins;
-					asyncloopCalculateTime(0, 0, function (temp) {
-						numberOfSeq = numberOfSeq + temp;
-						totalSec = numberOfSeq * 0.5 + 27
-						timecal = Math.floor(totalSec / 60) + 'mins ' + (totalSec % 60) + 's';
-						res.render("JOBINFO", { jobId: jobId, flag: flag, number: number, time: timecal });
-					});
+					totalSec = numberOfSeq * 0.5 + 27;
+					timecal = Math.floor(totalSec / 60) + 'mins ' + Math.floor(totalSec % 60) + 's';
+					res.render("JOBINFO", { jobId: jobId, flag: flag, number: number, time: timecal });
 				})
 			}
-			else res.render("JOBINFO", { jobId: jobId, flag: flag, number: number, time: "loading" });// in case 
+			else res.render("JOBINFO", { jobId: jobId, flag: flag, number: number, time: "...loading..." }); // in case
 		}
-		// When is task is processing
-		else if (flag == -1 && curJobID != null) {
-			jobInfo.findOne({ _id: curJobID }, function (err, doc) {
-				numberOfSeq = doc.proteins;
-				totalSec = numberOfSeq * 0.5 + 27;
-				timecal = Math.floor(totalSec / 60) + 'mins ' + (totalSec % 60) + 's';
-				res.render("JOBINFO", { jobId: jobId, flag: flag, number: number, time: timecal });
-			})
-		}
-		else res.render("JOBINFO", { jobId: jobId, flag: flag, number: number, time: "loading" }); // in case
 	});
 });
 
@@ -250,13 +254,16 @@ router.post("/upload/sequence", function (req, res) {
 
 
 			// send job ID email
+			let link = "<center><a href = \"http://mu-loc.org/upload/:" + job.id + "\">";
 			if (job.email !== "") {
 				var mail = {
 					from: 'MULocDeep<mulocdeep@gmail.com>',
 					subject: 'MULocDeep: Job Infomation',
 					to: email,
 					text: 'Your job ID is:' + job.id,
-					html: '<h3>MULocDeep</h3><br><p> Your job ID is:</p>' + job.id
+					html: '<center><h2>MULocDeep</h2></center><br><center><p> Your job is:</p><br></center>' +
+						link +
+						job.id + '</a></center>'
 				};
 				transporter.sendMail(mail, function (error, info) {
 					if (error) return console.log(error);
@@ -403,13 +410,16 @@ router.post("/upload/file", function (req, res) {
 			});
 
 			// send job ID email
+			let link = "<center><a href = \"http://mu-loc.org/upload/:" + job.id + "\">";
 			if (job.email !== "") {
 				var mail = {
 					from: 'MULocDeep<mulocdeep@gmail.com>',
 					subject: 'MULocDeep: Job Infomation',
 					to: email,
 					text: 'Your job ID is:' + job.id,
-					html: '<h3>MULocDeep</h3><br><p> Your job ID is:</p>' + job.id
+					html: '<center><h2>MULocDeep</h2></center><br><center><p> Your job is:</p><br></center>' +
+						link +
+						job.id + '</a></center>'
 				};
 				transporter.sendMail(mail, function (error, info) {
 					if (error) return console.log(error);

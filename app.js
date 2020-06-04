@@ -13,9 +13,9 @@ var jobInfo = require("./models/jobInfo"),
 	userInfo = require("./models/userInfo"),
 	fs = require("fs");
 // Docker
-// mongoose.connect("mongodb://mulocdeepdb:65521/mulocdeep");
+mongoose.connect("mongodb://mulocdeepdb:65521/mulocdeep");
 // Local
-mongoose.connect("mongodb://localhost/mulocdeep");
+// mongoose.connect("mongodb://localhost/mulocdeep");
 
 // app.enable('trust proxy');
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -34,10 +34,7 @@ app.get("*", function (req, res) {
 
 app.listen(8082, process.env.IP, function () {
 	console.log("The MULocDeep Server Has Started At: http://localhost:8082/ ...");
-	// let update = {$set: {capacity:0}}
-	// userInfo.updateMany({}, update, function(){
 
-	// });
 	jobInfo.find({}, function (err, docs) {
 		if (docs != undefined) {
 			asyncloopStartServer(0, docs, function () {

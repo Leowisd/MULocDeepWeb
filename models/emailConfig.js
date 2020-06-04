@@ -1,8 +1,8 @@
 var nodemailer = require("nodemailer");
 
 // SMTP CONFIG
-// mulocdeep@gmail.com
-// mulocdeep@2020
+// account: mulocdeep@gmail.com
+// password: mulocdeep@2020
 var config = {
 	host: 'smtp.gmail.com',
 	port: 465,
