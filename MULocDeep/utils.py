@@ -292,7 +292,7 @@ def process_input_user(seq_file,dir):
                 os.remove(inputfile)
             SeqIO.write(seq_record, inputfile, 'fasta')
             try:
-              psiblast_cline = NcbipsiblastCommandline(query=inputfile, db='./db/swissprot/swissprot', num_iterations=3,
+              psiblast_cline = NcbipsiblastCommandline(query=inputfile, db='./MULocDeep/db/swissprot/swissprot', num_iterations=3,
                                                      evalue=0.001, out_ascii_pssm=pssmfile, num_threads=4)
               stdout, stderr = psiblast_cline()
             except:

@@ -25,8 +25,7 @@ router.get("/upload/:id", function (req, res) {
 
 	var flag = 0;
 	var number = taskList.length;
-
-	jobInfo.findOne({ _id: jobId }, function (err, doc) {
+	setTimeout( function(){jobInfo.findOne({ _id: jobId }, function (err, doc) {
 		if (err) {
 			console.error(err);
 		}
@@ -42,7 +41,7 @@ router.get("/upload/:id", function (req, res) {
 	
 			// =================================
 			// Calculating estimated waiting time 
-			// the estimated function is: totalSecs = 0.5 * totalSeqs + 27
+			// the estimated function is: totalSecs = 4 * totalSeqs + 40
 			// =================================
 			let numberOfSeq = 0;
 			let timecal = "";
@@ -53,7 +52,7 @@ router.get("/upload/:id", function (req, res) {
 				if (taskList.length == 1 && curJobID == null) {
 					jobInfo.findOne({ _id: taskList[0] }, function (err, doc) {
 						numberOfSeq = doc.proteins;
-						totalSec = numberOfSeq * 0.5 + 27;
+						totalSec = numberOfSeq * 4 + 40;
 						timecal = Math.floor(totalSec / 60) + 'mins ' + Math.floor(totalSec % 60) + 's';
 						res.render("JOBINFO", { jobId: jobId, flag: flag, number: number, time: timecal });
 	
@@ -65,7 +64,7 @@ router.get("/upload/:id", function (req, res) {
 						numberOfSeq = doc0.proteins;
 						jobInfo.findOne({ _id: taskList[0] }, function (err, doc1) {
 							numberOfSeq = numberOfSeq + doc1.proteins;
-							totalSec = numberOfSeq * 0.5 + 27;
+							totalSec = numberOfSeq * 4 + 40;
 							timecal = Math.floor(totalSec / 60) + 'mins ' + Math.floor(totalSec % 60) + 's';
 							res.render("JOBINFO", { jobId: jobId, flag: flag, number: number, time: timecal });
 						});
@@ -77,7 +76,7 @@ router.get("/upload/:id", function (req, res) {
 						numberOfSeq = doc.proteins;
 						asyncloopCalculateTime(0, 0, function (temp) {
 							numberOfSeq = numberOfSeq + temp;
-							totalSec = numberOfSeq * 0.5 + 27
+							totalSec = numberOfSeq * 4 + 40
 							timecal = Math.floor(totalSec / 60) + 'mins ' + Math.floor(totalSec % 60) + 's';
 							res.render("JOBINFO", { jobId: jobId, flag: flag, number: number, time: timecal });
 						});
@@ -89,14 +88,15 @@ router.get("/upload/:id", function (req, res) {
 			else if (flag == -1 && curJobID != null) {
 				jobInfo.findOne({ _id: curJobID }, function (err, doc) {
 					numberOfSeq = doc.proteins;
-					totalSec = numberOfSeq * 0.5 + 27;
+					totalSec = numberOfSeq * 4 + 40;
 					timecal = Math.floor(totalSec / 60) + 'mins ' + Math.floor(totalSec % 60) + 's';
 					res.render("JOBINFO", { jobId: jobId, flag: flag, number: number, time: timecal });
 				})
 			}
 			else res.render("JOBINFO", { jobId: jobId, flag: flag, number: number, time: "...loading..." }); // in case
 		}
-	});
+	})}, 200)
+	
 });
 
 function asyncloopCalculateTime(i, temp, callback) {

@@ -177,6 +177,16 @@ schedule.scheduleJob(rule, function () {
 					// finalize the archive (ie we are done appending files but streams have to finish yet)
 					// 'close', 'end' or 'finish' may be fired right after calling this method so register to them beforehand
 					archive.finalize();
+
+					// delete pssm folder
+					let readDir = fs.readdirSync('data/results/' + job.id);
+					readDir.forEach(function (item, index) {
+						let stat = fs.statSync('data/results/' + job.id + '/' + item)
+						if (stat.isDirectory() === true) { 
+						  deleteFolder('data/results/' + job.id + '/' + item)
+						  console.log('pssm folder delete...');
+						}
+					})
 				});
 			}
 		});
@@ -185,7 +195,7 @@ schedule.scheduleJob(rule, function () {
 
 // clean data per three days
 // schedule.scheduleJob('0 * * * * *', function () {
-schedule.scheduleJob('0 0 0 */3 * *', function () {
+schedule.scheduleJob('0 0 0 * * *', function () {
 	console.log("Schedule jobs cleaning begins...");
 	var curTime = moment().utcOffset("-06:00").format('YYYY-MM-DD HH:mm:ss');
 	var curDay = parseInt(curTime.substring(8, 10));

@@ -14,7 +14,7 @@ NodeJS Express
 
 Change two paths to relative path to the current calling script.
 
-utils.py, line 275:
+utils.py, line 275 & 295:
 ```python
 psiblast_cline = NcbipsiblastCommandline(query=inputfile, db='./MULocDeep/db/swissprot/swissprot',num_iterations=3, evalue=0.001, out_ascii_pssm=pssmfile, num_threads=4)
 ```
@@ -62,6 +62,11 @@ Visit heep://localhost:8082/
 24. ~~add server restart clean function~~
 25. ~~add number of proteins display~~
 26. ~~add space adjust function~~
+### Version 1.4.2
+27. ~~Fix util.py path config bug~~
+28. ~~update correct timing function~~
+29. ~~delete pssm folder~~
+30. ~~change schedule cleaning to per day~~
 
 ## Problem
 1. ~~predict.py, predicting query like >Medtr2g018290.1;AT4G32520.2 wrong(temp solution: replace ; with :)~~
