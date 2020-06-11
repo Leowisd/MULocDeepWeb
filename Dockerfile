@@ -1,12 +1,3 @@
-# FROM node:8
-# RUN apt-get update && apt-get install -y \
-#     software-properties-common
-# RUN add-apt-repository ppa:deadsnakes/ppa
-# RUN apt-get update && apt-get install -y \ 
-#     python3.7 \
-#     python3-pip \
-#     python3-tk
-
 FROM nikolaik/python-nodejs:python3.7-nodejs10	
 RUN apt-get update && apt-get install -y \ 
     python3-tk
