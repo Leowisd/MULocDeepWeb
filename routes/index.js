@@ -230,14 +230,14 @@ schedule.scheduleJob('0 0 0 * * *', function () {
 
 	var curDayStr = '';
 	if (curDay < 10) {
-		curDayStr = '0' + curDay;
+		curDayStr = '0' + curDay.toString();
 	}
-	else curDayStr = curDay;
+	else curDayStr = curDay.toString();
 	var curMonthStr = '';
 	if (curMonth < 10){
-		curMonthStr = '0' + curMonth;
+		curMonthStr = '0' + curMonth.toString();
 	}
-	else curMonthStr = curMonth;
+	else curMonthStr = curMonth.toString();
 
 	var due = curYear + "-" + curMonthStr + "-" + curDayStr + " 00:00:00";
 	// var due = '2020' + "-" + curMonth + "-" + curDay + " 00:00:00";

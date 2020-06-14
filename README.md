@@ -91,6 +91,8 @@ $ sudo apt-get install -y nodejs
 $ git clone ...
 ```
 
+**Copy database folder** */db* **directly under** *MULocDeepWeb/MULocDeep/*
+
 ### Install Node packages via npm
 /MULocDeepWeb
 ```
