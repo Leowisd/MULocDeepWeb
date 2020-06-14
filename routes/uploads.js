@@ -1,3 +1,11 @@
+/* -------------------------------------------------------------------------- */
+/*                            Upload Router Module 		                      */
+/*								Author: Yifu Yao							  */
+/*							Last Updated Date: 6/14/2020 					  */
+/* -------------------------------------------------------------------------- */
+
+/* ------------------------------- Parameters ------------------------------- */
+
 var express = require("express");
 var router = express.Router({ mergeParams: true });
 var sd = require("silly-datetime"),
@@ -17,6 +25,7 @@ var transporter = require("../models/emailConfig");
 // max capacity for each user
 var maxCapacity = 100 * 1024 * 1024; //100 MB
 
+/* --------------------------------- Routers -------------------------------- */
 
 // JOBINFO: show the current job info
 router.get("/upload/:id", function (req, res) {
@@ -98,16 +107,6 @@ router.get("/upload/:id", function (req, res) {
 	})}, 200)
 	
 });
-
-function asyncloopCalculateTime(i, temp, callback) {
-	if (i < taskList.length) {
-		jobInfo.findOne({ _id: taskList[i] }, function (err, doc) {
-			temp = temp + doc.proteins;
-			asyncloopCalculateTime(i + 1, temp, callback);
-		})
-	}
-	else callback(temp);
-}
 
 // Add-on email submit on job info page
 router.post("/upload/email", function (req, res) {
@@ -439,13 +438,44 @@ router.post("/upload/file", function (req, res) {
 	// });
 });
 
+/* -------------------------------- Functions ------------------------------- */
+
+/**
+ * async loop to calculate waiting time
+ * sync loop causes problem when visiting db
+ * @param {*} i
+ * @param {*} temp
+ * @param {*} callback
+ */
+function asyncloopCalculateTime(i, temp, callback) {
+	if (i < taskList.length) {
+		jobInfo.findOne({ _id: taskList[i] }, function (err, doc) {
+			temp = temp + doc.proteins;
+			asyncloopCalculateTime(i + 1, temp, callback);
+		})
+	}
+	else callback(temp);
+}
+
+
+/**
+ * Get cur user's IP address
+ *
+ * @param {*} req
+ * @returns
+ */
 function get_client_ip(req) {
 	var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 	ipStr = ip.split(':');
 	return ipStr[ipStr.length - 1];
 };
 
-// Change mulit lines seq to one seq
+/**
+ * Change mulit lines seq to one seq
+ *
+ * @param {*} seq
+ * @returns one line seq
+ */
 function format(seq) {
 	let data = seq.trim().split('>');
 	var res = "";
@@ -465,6 +495,13 @@ function format(seq) {
 	return res.trim();
 }
 
+
+/**
+ * Get the number of proteins of cur protein
+ * 
+ * @param {*} seq
+ * @returns
+ */
 function getNumofProteins(seq) {
 	return seq.trim().split('>').length - 1;
 }

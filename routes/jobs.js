@@ -1,3 +1,11 @@
+/* -------------------------------------------------------------------------- */
+/*                             Jobs Router Module  		                      */
+/*								Author: Yifu Yao							  */
+/*							Last Updated Date: 6/14/2020 					  */
+/* -------------------------------------------------------------------------- */
+
+/* ------------------------------- Parameters ------------------------------- */
+
 var express = require("express");
 var router = express.Router();
 var fs = require("fs");
@@ -5,6 +13,8 @@ var request = require("request");
 
 var jobInfo = require("../models/jobInfo");
 var userInfo = require("../models/userInfo");
+
+/* --------------------------------- Routers -------------------------------- */
 
 // SEARCH: show the search page
 router.get("/jobs", function (req, res) {
@@ -258,13 +268,24 @@ router.post("/jobs/delete/:id", function (req, res) {
 	});
 });
 
+/* -------------------------------- Functions ------------------------------- */
+
+/**
+ * get cur user ip address
+ *
+ * @param {*} req
+ * @returns
+ */
 function get_client_ip(req) {
 	var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 	ipStr = ip.split(':');
 	return ipStr[ipStr.length - 1];
 };
 
-
+/**
+ * Delete cur folder and all items in it
+ * @param {*} path: Deleted folder path
+ */
 function deleteFolder(path) {
 	let files = [];
 	if (fs.existsSync(path)) {

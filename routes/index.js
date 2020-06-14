@@ -1,3 +1,10 @@
+/* -------------------------------------------------------------------------- */
+/*                           	  Router Module   		                      */
+/*								Author: Yifu Yao							  */
+/*							Last Updated Date: 6/14/2020 					  */
+/* -------------------------------------------------------------------------- */
+
+/* ------------------------------- Parameters ------------------------------- */
 var express = require("express");
 var router = express.Router({ mergeParams: true });
 var sd = require("silly-datetime"),
@@ -17,25 +24,33 @@ taskList = [];
 curJobID = null;
 var curProcess = 0;
 
-// INDEX: show the landing page
+/* --------------------------------- Routers -------------------------------- */
+// Landing page
 router.get("/", function (req, res) {
 	// console.log(get_client_ip(req));
 	res.render("UPLOAD");
 });
 
+// Map page
 router.get("/map", function (req, res) {
 	res.render("MAP");
 });
 
+// Contact page
 router.get("/contact", function (req, res) {
 	res.render("CONTACT");
 });
 
+// Other tools page
 router.get("/tools", function (req, res) {
 	res.render("TOOLS");
 });
 
-// Set a rule schedule to run tasks per 5s
+/* -------------------------------- Functions ------------------------------- */
+
+/** Schedule task to run predicting job
+ * Cur schedule: per 5s
+*/
 var rule = new schedule.RecurrenceRule();
 var ruleTime = [1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56];
 rule.second = ruleTime;
@@ -193,7 +208,9 @@ schedule.scheduleJob(rule, function () {
 	}
 });
 
-// clean data per three days
+/** Schedule task to clean data per 3 days
+ * Cur schedule: per day 00:00:00
+*/
 // schedule.scheduleJob('0 * * * * *', function () {
 schedule.scheduleJob('0 0 0 * * *', function () {
 	console.log("Schedule jobs cleaning begins...");
@@ -255,6 +272,10 @@ schedule.scheduleJob('0 0 0 * * *', function () {
 	});
 });
 
+/**
+ * Delete cur folder and all items in it
+ * @param {*} path: Deleted folder path
+ */
 function deleteFolder(path) {
 	let files = [];
 	if (fs.existsSync(path)) {
@@ -279,6 +300,13 @@ function deleteFolder(path) {
 	}
 }
 
+/**
+ * async loop to delete jobs
+ * sync loop will cause problem when visiting db
+ * @param {*} i: cur index in docs
+ * @param {*} docs: results from finding
+ * @param {*} callback: callback function
+ */
 function asyncLoopScheduleClean(i, docs, callback) {
 	if (i < docs.length) {
 		let dUser = docs[i].ipAddress;

@@ -1,3 +1,11 @@
+/* -------------------------------------------------------------------------- */
+/*                               Map JS File                                  */
+/*								              Author: Yifu Yao              							  */
+/*							           Last Updated Date: 6/14/2020            					  */
+/* -------------------------------------------------------------------------- */
+
+/* ------------------------------- Map setting ------------------------------ */
+
 var map = new Datamap({
     element: document.getElementById("map"),
     geographyConfig: {
@@ -33,6 +41,8 @@ var map = new Datamap({
     }, sleep);
   })
 
+
+/* ----------------------- Get and show statistic data ---------------------- */
   $("#userNumHead").fadeIn(1000);
   $("#userNumber").fadeIn(1000);
   var statisticUserURL = '/process/statistic/users';

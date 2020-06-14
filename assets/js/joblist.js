@@ -1,3 +1,9 @@
+/* -------------------------------------------------------------------------- */
+/*                                Joblist JS File                             */
+/*								Author: Yifu Yao							  */
+/*							Last Updated Date: 6/14/2020 					  */
+/* -------------------------------------------------------------------------- */
+
 // auto fresh
 function myrefresh() {
     window.location.reload();
@@ -11,6 +17,11 @@ $(document).ready(function () {
     $('.dataTables_length').addClass('bs-select');
 });
 
+/**
+ * Delete selected task  
+ *
+ * @param {*} obj
+ */
 function deleteTr(obj) {
     var con;
     con = confirm("Are you sure you wanna delete this job?");

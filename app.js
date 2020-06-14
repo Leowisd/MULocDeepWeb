@@ -1,3 +1,10 @@
+/* -------------------------------------------------------------------------- */
+/*                                Entrance File                               */
+/*								Author: Yifu Yao							  */
+/*							Last Updated Date: 6/14/2020 					  */
+/* -------------------------------------------------------------------------- */
+
+/* ------------------------------- Parameters ------------------------------- */
 var express = require("express"),
 	app = express(),
 	bodyParser = require("body-parser"),
@@ -12,29 +19,34 @@ var uploadsRoutes = require("./routes/uploads"),
 var jobInfo = require("./models/jobInfo"),
 	userInfo = require("./models/userInfo"),
 	fs = require("fs");
+
+/* -------------------------- mongoDB configuration ------------------------- */
 // Docker
 mongoose.connect("mongodb://mulocdeepdb:65521/mulocdeep");
 // Local
 // mongoose.connect("mongodb://localhost/mulocdeep");
 
+/* -------------------------- Express configuration ------------------------- */
 // app.enable('trust proxy');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.use(express.static('assets'))
 
+/* --------------------------------- Routers -------------------------------- */
 app.use(indexRoutes);
 app.use(uploadsRoutes);
 app.use(jobsRoutes);
 app.use(processRoutes);
 app.use(resultsRoutes);
 
+// invalid router
 app.get("*", function (req, res) {
 	res.render("404");
 });
 
 app.listen(8082, process.env.IP, function () {
 	console.log("The MULocDeep Server Has Started At: http://localhost:8082/ ...");
-
+	//  When system's version updates, server deletes all invalid jobs records 
 	jobInfo.find({}, function (err, docs) {
 		if (docs != undefined) {
 			asyncloopStartServer(0, docs, function () {
@@ -44,6 +56,15 @@ app.listen(8082, process.env.IP, function () {
 	})
 })
 
+/* -------------------------------- Functions ------------------------------- */
+
+/**
+ * async loop to delete all invalid jobs
+ * sync loop will cause problem when visiting db
+ * @param {*} i: cur index in docs
+ * @param {*} docs: results from finding
+ * @param {*} callback: callback function
+ */
 function asyncloopStartServer(i, docs, callback) {
 	if (i < docs.length) {
 		let job = docs[i];
@@ -66,6 +87,10 @@ function asyncloopStartServer(i, docs, callback) {
 	else callback();
 }
 
+/**
+ * Delete cur folder and all items in it
+ * @param {*} path: Deleted folder path
+ */
 function deleteFolder(path) {
 	let files = [];
 	if (fs.existsSync(path)) {

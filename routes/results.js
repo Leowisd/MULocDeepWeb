@@ -1,15 +1,26 @@
+/* -------------------------------------------------------------------------- */
+/*                            Result Router Module		                      */
+/*								Author: Yifu Yao							  */
+/*							Last Updated Date: 6/14/2020 					  */
+/* -------------------------------------------------------------------------- */
+
+/* ------------------------------- Parameters ------------------------------- */
+
 var express = require("express");
 var router = express.Router();
 
 var jobInfo = require("../models/jobInfo");
 var userInfo = require("../models/userInfo");
 
-// Search POST
+/* --------------------------------- Routers -------------------------------- */
+
+// Search Post with ID
 router.post("/result/id", function (req, res) {
 	var jobId = req.body.JobIDInput.trim();
 	res.redirect("/jobs/:" + jobId);
 });
 
+// Search Post with nickname
 router.post("/result/name", function (req, res) {
 	var name = req.body.NicknameInput.trim();
 
@@ -24,6 +35,7 @@ router.post("/result/name", function (req, res) {
 	});
 });
 
+// Search Post with sequence
 router.post("/result/seq", function (req, res) {
 	var seq = req.body.sequenceInput.trim();
 
@@ -38,6 +50,10 @@ router.post("/result/seq", function (req, res) {
 	});
 });
 
+/**
+ * Get cur user's IP address
+ * @param {*} req 
+ */
 function get_client_ip(req) {
 	var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 	ipStr = ip.split(':');

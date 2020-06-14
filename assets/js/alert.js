@@ -1,3 +1,5 @@
+// didn't use
+
 window.Modal = function () {
     var reg = new RegExp("\\[([^\\[\\]]*?)\\]", 'igm');
     var alr = $("#ycf-alert");

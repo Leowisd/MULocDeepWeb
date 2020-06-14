@@ -1,3 +1,9 @@
+/* -------------------------------------------------------------------------- */
+/*                       	Jobs Schema Configuration File                    */
+/*								Author: Yifu Yao							  */
+/*							Last Updated Date: 6/14/2020 					  */
+/* -------------------------------------------------------------------------- */
+
 var mongoose = require("mongoose");
 
 var jobInfoSchema = new mongoose.Schema({
