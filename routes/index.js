@@ -209,16 +209,16 @@ schedule.scheduleJob(rule, function () {
 });
 
 /** Schedule task to clean data per 3 days
- * Cur schedule: per day 00:00:00
+ * Cur schedule: 06:00:00 every day(UTC)
 */
 // schedule.scheduleJob('0 * * * * *', function () {
-schedule.scheduleJob('0 0 0 * * *', function () {
+schedule.scheduleJob('0 0 6 * * *', function () {
 	console.log("Schedule jobs cleaning begins...");
 	var curTime = moment().utcOffset("-06:00").format('YYYY-MM-DD HH:mm:ss');
 	var curDay = parseInt(curTime.substring(8, 10));
 	var curMonth = parseInt(curTime.substring(5, 7));
 	var curYear = parseInt(curTime.substring(0, 4));
-	curDay -= 4; //loose to 4 days
+	curDay -= 3;
 	if (curDay <= 0) {
 		curDay = 30 + curDay;
 		curMonth--;
@@ -230,14 +230,14 @@ schedule.scheduleJob('0 0 0 * * *', function () {
 
 	var curDayStr = '';
 	if (curDay < 10) {
-		curDayStr = '0' + curDay.toString();
+		curDayStr = '0' + curDay;
 	}
-	else curDayStr = curDay.toString();
+	else curDayStr = curDay;
 	var curMonthStr = '';
 	if (curMonth < 10){
-		curMonthStr = '0' + curMonth.toString();
+		curMonthStr = '0' + curMonth;
 	}
-	else curMonthStr = curMonth.toString();
+	else curMonthStr = curMonth;
 
 	var due = curYear + "-" + curMonthStr + "-" + curDayStr + " 00:00:00";
 	// var due = '2020' + "-" + curMonth + "-" + curDay + " 00:00:00";

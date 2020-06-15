@@ -26,6 +26,7 @@
   - [Version 1.3.1](#version-131)
   - [Version 1.4](#version-14)
   - [Version 1.4.2](#version-142)
+  - [Version 1.5](#version-15)
 
 ## Web Configuration 
 
@@ -212,3 +213,5 @@ Visit http://localhost:8082/ to check
 2. Updated correct timing function
 3. Deleted pssm folder
 4. Changed schedule cleaning to per day
+### Version 1.5
+1. Updated schedule cleaning time to UTC 6:00:00
